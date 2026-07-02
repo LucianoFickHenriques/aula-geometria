@@ -432,6 +432,27 @@
   .quiz-opt.correct { border-color: var(--accent3); background: #43e97b22; color: #43e97b; }
   .quiz-opt.wrong { border-color: var(--accent2); background: #ff658422; color: var(--accent2); }
 
+  /* ── QUIZ: menu de questões e navegação ── */
+  .quiz-qmenu { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+  .qchip {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-weight: 700;
+    font-size: .85rem;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .qchip:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+  .qchip.ok  { background: #59d6a822; border-color: var(--accent3); color: #2fae7d; }
+  .qchip.bad { background: #ff5fa218; border-color: var(--accent2); color: var(--accent2); }
+  .qchip.current { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .qchip.current:not(.ok):not(.bad) { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .quiz-nav { display: flex; gap: 10px; margin-top: 18px; align-items: center; flex-wrap: wrap; }
+  .btn:disabled { opacity: .35; cursor: default; transform: none !important; box-shadow: none !important; }
+
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(30px); }
@@ -750,7 +771,7 @@
         <circle cx="110" cy="111" r="3.5" fill="#2e2b33"/>
       </svg>
     </div>
-    <div class="welcome-eyebrow">✨ Maria Eduarda ✨</div>
+    <div class="welcome-eyebrow">✨ Estudos da Maria Eduarda ✨</div>
     <h1 class="welcome-title">
       Bem-vinda, meu amor 💗
       
@@ -1474,25 +1495,30 @@
 ═════════════════════════════════════════ -->
 <section id="quiz">
   <div class="section-label">Módulo 8</div>
-  <h2>Quiz Rápido</h2>
-  <p class="section-intro">Teste o que aprendeu! 14 questões no estilo ENEM. Sem pressão — você pode refazer quantas vezes quiser.</p>
+  <h2>Quiz por Níveis</h2>
+  <p class="section-intro">24 questões no estilo ENEM em 3 níveis de dificuldade. Escolha o nível, clique em qualquer questão do menu e navegue livremente — refaça quantas vezes quiser.</p>
 
   <div class="card reveal" id="quizCard">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-      <div>
-        <span id="quizProgress" style="color:var(--muted); font-size:.9rem;">Questão 1 de 8</span>
-        <div class="progress-bar-wrap" style="width:200px; margin-top:6px;">
-          <div class="progress-bar-fill" id="quizBar" style="width:0%"></div>
-        </div>
-      </div>
-      <span id="quizScore" style="font-weight:700; color:var(--accent3); font-size:1.1rem;">Pontos: 0</span>
+    <div class="tabs" id="quizLevels"></div>
+    <div class="quiz-qmenu" id="quizMenu"></div>
+
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+      <span id="quizProgress" style="color:var(--muted); font-size:.9rem;"></span>
+      <span id="quizScore" style="font-weight:700; color:var(--accent3); font-size:1.05rem;"></span>
+    </div>
+    <div class="progress-bar-wrap" style="margin-bottom:20px;">
+      <div class="progress-bar-fill" id="quizBar" style="width:0%"></div>
     </div>
 
-    <div id="quizQuestion" style="font-size:1.05rem; margin-bottom:20px; min-height:60px;"></div>
+    <div id="quizQuestion" style="font-size:1.05rem; margin-bottom:20px; min-height:48px;"></div>
     <div id="quizOptions"></div>
     <div id="quizFeedback" style="margin-top:16px; display:none;"></div>
-    <button class="btn" id="quizNext" style="margin-top:16px; display:none;" onclick="nextQuestion()">Próxima →</button>
-    <div id="quizResult" style="display:none;"></div>
+
+    <div class="quiz-nav">
+      <button class="btn secondary" id="quizPrev">← Anterior</button>
+      <button class="btn" id="quizNextBtn">Próxima →</button>
+      <button class="btn secondary" id="quizRedo" style="margin-left:auto;">↺ Refazer nível</button>
+    </div>
   </div>
 </section>
 
@@ -2643,175 +2669,273 @@ function switchTab(group, id){
 // ════════════════════════════════════════
 // QUIZ
 // ════════════════════════════════════════
+// level: 1 = Fácil, 2 = Médio, 3 = Difícil
 const questions=[
+  // ── NÍVEL FÁCIL ──
   {
+    level:1,
     q:'Um retângulo tem base 12 m e altura 5 m. Qual é sua área?',
     opts:['60 m²','70 m²','34 m²','17 m²'],
     answer:0,
     explain:'A = b × h = 12 × 5 = 60 m²'
   },
   {
+    level:1,
     q:'Qual é a área de um triângulo com base 10 m e altura 8 m?',
     opts:['80 m²','40 m²','18 m²','16 m²'],
     answer:1,
     explain:'A = (b × h)/2 = (10 × 8)/2 = 40 m²'
   },
   {
-    q:'Um triângulo retângulo tem catetos de 6 m e 8 m. Qual é a hipotenusa?',
-    opts:['14 m','10 m','12 m','7 m'],
-    answer:1,
-    explain:'c = √(6² + 8²) = √(36+64) = √100 = 10 m (terna 6-8-10)'
-  },
-  {
+    level:1,
     q:'A área de um círculo com raio 5 m é: (use π = 3)',
     opts:['75 m²','30 m²','78,5 m²','15 m²'],
     answer:0,
     explain:'A = π × r² = 3 × 5² = 3 × 25 = 75 m²'
   },
   {
-    q:'Um trapézio tem bases 8 m e 14 m e altura 6 m. Qual é sua área?',
-    opts:['66 m²','48 m²','72 m²','132 m²'],
-    answer:0,
-    explain:'A = (8+14) × 6 / 2 = 22 × 3 = 66 m²'
-  },
-  {
+    level:1,
     q:'Um losango tem diagonais de 10 m e 6 m. Sua área é:',
     opts:['60 m²','30 m²','16 m²','32 m²'],
     answer:1,
     explain:'A = (D × d)/2 = (10 × 6)/2 = 30 m²'
   },
   {
+    level:1,
     q:'Qual é o perímetro de um quadrado com lado 7 m?',
     opts:['14 m','49 m','28 m','21 m'],
     answer:2,
     explain:'P = 4 × l = 4 × 7 = 28 m'
   },
   {
+    level:1,
     q:'A soma dos ângulos internos de qualquer triângulo é:',
     opts:['90°','270°','360°','180°'],
     answer:3,
     explain:'A soma dos ângulos internos de todo triângulo é sempre 180°.'
   },
   {
-    q:'Qual é a soma dos ângulos internos de um hexágono (6 lados)?',
-    opts:['360°','540°','720°','900°'],
-    answer:2,
-    explain:'Soma = (n−2)×180° = (6−2)×180° = 4×180° = 720°.'
-  },
-  {
-    q:'Um poste de 6 m projeta sombra de 4 m. No mesmo instante, uma pessoa projeta sombra de 2 m. Qual a altura da pessoa?',
-    opts:['2 m','3 m','4 m','1,5 m'],
-    answer:1,
-    explain:'Pelo Teorema de Tales: 6/4 = h/2 → h = (6×2)/4 = 3 m.'
-  },
-  {
-    q:'Dois triângulos semelhantes têm razão de semelhança k = 3. Se a área do menor é 10 m², qual é a área do maior?',
-    opts:['30 m²','13 m²','90 m²','33 m²'],
-    answer:2,
-    explain:'A razão das áreas é k² = 3² = 9. Área maior = 10 × 9 = 90 m².'
-  },
-  {
-    q:'Quantas diagonais tem um octógono (8 lados)?',
-    opts:['16','20','8','28'],
-    answer:1,
-    explain:'Diagonais = n(n−3)/2 = 8×5/2 = 20.'
-  },
-  {
+    level:1,
     q:'Retas paralelas cortadas por transversais formam segmentos proporcionais. Esse é o:',
     opts:['Teorema de Pitágoras','Teorema de Tales','Teorema do ângulo externo','Teorema de Heron'],
     answer:1,
     explain:'O Teorema de Tales garante a proporcionalidade dos segmentos entre paralelas cortadas por transversais.'
   },
   {
+    level:1,
+    q:'Um círculo tem raio de 7 cm. Qual é o seu diâmetro?',
+    opts:['3,5 cm','49 cm','21 cm','14 cm'],
+    answer:3,
+    explain:'O diâmetro é o dobro do raio: d = 2r = 2 × 7 = 14 cm.'
+  },
+
+  // ── NÍVEL MÉDIO ──
+  {
+    level:2,
+    q:'Um triângulo retângulo tem catetos de 6 m e 8 m. Qual é a hipotenusa?',
+    opts:['14 m','10 m','12 m','7 m'],
+    answer:1,
+    explain:'c = √(6² + 8²) = √(36+64) = √100 = 10 m (terna 6-8-10)'
+  },
+  {
+    level:2,
+    q:'Um trapézio tem bases 8 m e 14 m e altura 6 m. Qual é sua área?',
+    opts:['66 m²','48 m²','72 m²','132 m²'],
+    answer:0,
+    explain:'A = (8+14) × 6 / 2 = 22 × 3 = 66 m²'
+  },
+  {
+    level:2,
+    q:'Qual é a soma dos ângulos internos de um hexágono (6 lados)?',
+    opts:['360°','540°','720°','900°'],
+    answer:2,
+    explain:'Soma = (n−2)×180° = (6−2)×180° = 4×180° = 720°.'
+  },
+  {
+    level:2,
+    q:'Um poste de 6 m projeta sombra de 4 m. No mesmo instante, uma pessoa projeta sombra de 2 m. Qual a altura da pessoa?',
+    opts:['2 m','3 m','4 m','1,5 m'],
+    answer:1,
+    explain:'Pelo Teorema de Tales: 6/4 = h/2 → h = (6×2)/4 = 3 m.'
+  },
+  {
+    level:2,
+    q:'Quantas diagonais tem um octógono (8 lados)?',
+    opts:['16','20','8','28'],
+    answer:1,
+    explain:'Diagonais = n(n−3)/2 = 8×5/2 = 20.'
+  },
+  {
+    level:2,
     q:'Qual é o ângulo interno de um pentágono regular (5 lados)?',
     opts:['100°','108°','120°','135°'],
     answer:1,
     explain:'Ângulo interno = (n−2)×180°/n = (5−2)×180°/5 = 540°/5 = 108°.'
+  },
+  {
+    level:2,
+    q:'Uma escada de 13 m está apoiada em um muro, com a base a 5 m dele. A que altura a escada toca o muro?',
+    opts:['8 m','10 m','12 m','11 m'],
+    answer:2,
+    explain:'Pitágoras: h² = 13² − 5² = 169 − 25 = 144 → h = 12 m (terna 5-12-13).'
+  },
+  {
+    level:2,
+    q:'Qual é a área de um setor circular de 90° em um círculo de raio 8 m? (use π = 3)',
+    opts:['24 m²','48 m²','64 m²','192 m²'],
+    answer:1,
+    explain:'A = (90/360) × π × r² = (1/4) × 3 × 64 = 48 m².'
+  },
+
+  // ── NÍVEL DIFÍCIL ──
+  {
+    level:3,
+    q:'Dois triângulos semelhantes têm razão de semelhança k = 3. Se a área do menor é 10 m², qual é a área do maior?',
+    opts:['30 m²','13 m²','90 m²','33 m²'],
+    answer:2,
+    explain:'A razão das áreas é k² = 3² = 9. Área maior = 10 × 9 = 90 m².'
+  },
+  {
+    level:3,
+    q:'Um losango tem diagonais de 6 m e 8 m. Quanto mede o lado do losango?',
+    opts:['4,8 m','5 m','7 m','10 m'],
+    answer:1,
+    explain:'As diagonais se cortam ao meio formando triângulos retângulos de catetos 3 e 4 → lado = √(3²+4²) = 5 m.'
+  },
+  {
+    level:3,
+    q:'Um retângulo tem diagonal de 10 m e base de 8 m. Qual é sua área?',
+    opts:['80 m²','48 m²','60 m²','40 m²'],
+    answer:1,
+    explain:'Pitágoras: altura = √(10² − 8²) = √36 = 6 m. Área = 8 × 6 = 48 m².'
+  },
+  {
+    level:3,
+    q:'Um círculo está inscrito em um quadrado de lado 10 m. Qual é a área do quadrado NÃO coberta pelo círculo? (use π = 3)',
+    opts:['75 m²','50 m²','25 m²','100 m²'],
+    answer:2,
+    explain:'Raio do círculo = 5 m. Área do quadrado − área do círculo = 100 − 3×25 = 100 − 75 = 25 m².'
+  },
+  {
+    level:3,
+    q:'Qual é a área de um hexágono regular de lado 4 m? (use √3 = 1,7)',
+    opts:['27,2 m²','48 m²','40,8 m²','81,6 m²'],
+    answer:2,
+    explain:'A = 3l²√3/2 = 3 × 16 × 1,7 / 2 = 81,6/2 = 40,8 m².'
+  },
+  {
+    level:3,
+    q:'Qual é a altura de um triângulo equilátero de lado 6 m? (use √3 = 1,7)',
+    opts:['3 m','5,1 m','10,2 m','6 m'],
+    answer:1,
+    explain:'h = l√3/2 = 6 × 1,7 / 2 = 10,2/2 = 5,1 m.'
+  },
+  {
+    level:3,
+    q:'Dois polígonos semelhantes têm razão entre os perímetros igual a 2. Qual é a razão entre suas áreas?',
+    opts:['2','√2','8','4'],
+    answer:3,
+    explain:'A razão dos perímetros é igual a k. A razão das áreas é k² = 2² = 4.'
+  },
+  {
+    level:3,
+    q:'Dois círculos concêntricos têm raios 5 m e 3 m. Qual é a área da coroa circular entre eles? (use π = 3)',
+    opts:['27 m²','75 m²','6 m²','48 m²'],
+    answer:3,
+    explain:'A = π(R² − r²) = 3 × (25 − 9) = 3 × 16 = 48 m².'
   }
 ];
 
-let qIdx=0, score=0, answered=false;
+const LEVELS=[
+  {id:1, name:'🌸 Fácil'},
+  {id:2, name:'💪 Médio'},
+  {id:3, name:'🔥 Difícil'}
+];
+let curLevel=1, curIdx=0;
+const given={}; // índice global da questão -> alternativa escolhida
 
-function renderQuestion(){
-  const q=questions[qIdx];
-  $('quizProgress').textContent=`Questão ${qIdx+1} de ${questions.length}`;
-  $('quizBar').style.width=(qIdx/questions.length*100)+'%';
+function levelList(){
+  return questions.map((q,i)=>({q,i})).filter(x=>x.q.level===curLevel);
+}
+
+function renderQuiz(){
+  // abas de nível
+  $('quizLevels').innerHTML='';
+  LEVELS.forEach(l=>{
+    const b=document.createElement('button');
+    b.className='tab-btn'+(l.id===curLevel?' active':'');
+    b.textContent=l.name+' ('+questions.filter(q=>q.level===l.id).length+')';
+    b.onclick=()=>{ curLevel=l.id; curIdx=0; renderQuiz(); };
+    $('quizLevels').appendChild(b);
+  });
+
+  const list=levelList();
+  if(curIdx>=list.length) curIdx=0;
+
+  // menu de questões do nível
+  $('quizMenu').innerHTML='';
+  list.forEach((x,k)=>{
+    const b=document.createElement('button');
+    b.className='qchip'+(k===curIdx?' current':'');
+    if(given[x.i]!==undefined) b.classList.add(given[x.i]===x.q.answer?'ok':'bad');
+    b.textContent=k+1;
+    b.title='Questão '+(k+1);
+    b.onclick=()=>{ curIdx=k; renderQuiz(); };
+    $('quizMenu').appendChild(b);
+  });
+
+  const {q,i}=list[curIdx];
+  const done=list.filter(x=>given[x.i]!==undefined).length;
+  const okCount=list.filter(x=>given[x.i]===x.q.answer).length;
+  const levelName=LEVELS.find(l=>l.id===curLevel).name;
+
+  $('quizProgress').textContent=`Questão ${curIdx+1} de ${list.length} — Nível ${levelName}`;
+  $('quizScore').textContent=`Acertos: ${okCount} de ${done} respondidas`;
+  $('quizBar').style.width=(done/list.length*100)+'%';
   $('quizQuestion').textContent=q.q;
+
+  // alternativas (se já respondida, mostra o resultado gravado e trava)
+  const chosen=given[i];
   $('quizOptions').innerHTML='';
-  $('quizFeedback').style.display='none';
-  $('quizNext').style.display='none';
-  answered=false;
-  q.opts.forEach((opt,i)=>{
+  q.opts.forEach((opt,j)=>{
     const btn=document.createElement('button');
     btn.className='quiz-opt';
-    btn.textContent=String.fromCharCode(65+i)+') '+opt;
-    btn.onclick=()=>selectAnswer(i);
+    btn.textContent=String.fromCharCode(65+j)+') '+opt;
+    if(chosen!==undefined){
+      btn.style.pointerEvents='none';
+      if(j===q.answer) btn.classList.add('correct');
+      else if(j===chosen) btn.classList.add('wrong');
+    } else {
+      btn.onclick=()=>{ given[i]=j; renderQuiz(); };
+    }
     $('quizOptions').appendChild(btn);
   });
-}
 
-function selectAnswer(i){
-  if(answered) return;
-  answered=true;
-  const q=questions[qIdx];
-  const btns=document.querySelectorAll('.quiz-opt');
-  btns.forEach((b,j)=>{
-    if(j===q.answer) b.classList.add('correct');
-    else if(j===i) b.classList.add('wrong');
-    b.style.pointerEvents='none';
-  });
-  const correct=i===q.answer;
-  if(correct) score++;
-  $('quizScore').textContent='Pontos: '+score;
+  // feedback + resumo quando o nível é concluído
   const fb=$('quizFeedback');
-  fb.style.display='block';
-  fb.innerHTML=`<div style="color:${correct?'#43e97b':'#ff6584'}; font-weight:700;">${correct?'✅ Correto!':'❌ Incorreto'}</div><div style="margin-top:8px; color:var(--muted); font-size:.9rem;">${q.explain}</div>`;
-  if(qIdx<questions.length-1){
-    $('quizNext').style.display='inline-block';
+  if(chosen!==undefined){
+    const correct=chosen===q.answer;
+    let html=`<div style="color:${correct?'#2fae7d':'var(--accent2)'}; font-weight:700;">${correct?'✅ Correto!':'❌ Incorreto'}</div><div style="margin-top:8px; color:var(--muted); font-size:.9rem;">${q.explain}</div>`;
+    if(done===list.length){
+      const pct=Math.round(okCount/list.length*100);
+      html+=`<div class="result-box" style="margin-top:14px;">${pct>=80?'🏆':pct>=50?'👍':'📚'} <b>Nível completo!</b> Você acertou <strong>${okCount} de ${list.length}</strong> (${pct}%). ${pct>=80?'Arrasou!':pct>=50?'Muito bom — revise as que errou clicando nos números rosa.':'Revise o conteúdo acima e use o botão Refazer nível!'}</div>`;
+    }
+    fb.style.display='block';
+    fb.innerHTML=html;
   } else {
-    setTimeout(showResult,600);
+    fb.style.display='none';
+    fb.innerHTML='';
   }
+
+  $('quizPrev').disabled = curIdx===0;
+  $('quizNextBtn').disabled = curIdx===list.length-1;
 }
 
-function nextQuestion(){
-  qIdx++;
-  if(qIdx<questions.length) renderQuestion();
-  else showResult();
-}
+$('quizPrev').onclick=()=>{ if(curIdx>0){ curIdx--; renderQuiz(); } };
+$('quizNextBtn').onclick=()=>{ if(curIdx<levelList().length-1){ curIdx++; renderQuiz(); } };
+$('quizRedo').onclick=()=>{ levelList().forEach(x=>delete given[x.i]); curIdx=0; renderQuiz(); };
 
-function showResult(){
-  $('quizCard').innerHTML=`
-    <div style="text-align:center; padding:20px 0;">
-      <div style="font-size:3rem; margin-bottom:16px;">${score>=6?'🏆':score>=4?'👍':'📚'}</div>
-      <h3 style="font-size:1.6rem; margin-bottom:8px;">Você acertou ${score} de ${questions.length}!</h3>
-      <p style="color:var(--muted); margin-bottom:24px;">${score>=6?'Excelente! Continue assim!':score>=4?'Bom! Revise os tópicos que errou.':'Continue estudando — volte ao conteúdo acima!'}</p>
-      <div style="background:var(--surface); border-radius:12px; padding:20px; margin-bottom:24px;">
-        <div style="font-size:2rem; font-weight:800; color:var(--accent3);">${Math.round(score/questions.length*100)}%</div>
-        <div class="progress-bar-wrap" style="margin:12px 0;"><div class="progress-bar-fill" style="width:${score/questions.length*100}%"></div></div>
-      </div>
-      <button class="btn" onclick="qIdx=0;score=0;$('quizCard').innerHTML='';buildQuiz();">Refazer Quiz</button>
-    </div>
-  `;
-}
-
-function buildQuiz(){
-  $('quizCard').innerHTML=`
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-      <div>
-        <span id="quizProgress" style="color:var(--muted); font-size:.9rem;"></span>
-        <div class="progress-bar-wrap" style="width:200px; margin-top:6px;"><div class="progress-bar-fill" id="quizBar" style="width:0%"></div></div>
-      </div>
-      <span id="quizScore" style="font-weight:700; color:var(--accent3); font-size:1.1rem;">Pontos: 0</span>
-    </div>
-    <div id="quizQuestion" style="font-size:1.05rem; margin-bottom:20px; min-height:60px;"></div>
-    <div id="quizOptions"></div>
-    <div id="quizFeedback" style="margin-top:16px; display:none;"></div>
-    <button class="btn" id="quizNext" style="margin-top:16px; display:none;" onclick="nextQuestion()">Próxima →</button>
-  `;
-  renderQuestion();
-}
-
-renderQuestion();
+renderQuiz();
 </script>
 </body>
 </html>
