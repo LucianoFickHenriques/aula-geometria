@@ -680,8 +680,35 @@
     to { opacity: 0; }
   }
 
+  /* ── AVATAR ── */
+  .avatar-wrap {
+    width: 132px;
+    height: 132px;
+    margin: 0 auto 6px;
+    animation: avatarBob 3s ease-in-out infinite;
+    filter: drop-shadow(0 10px 18px #ff5fa244);
+  }
+  .avatar-wrap svg { width: 100%; height: 100%; display: block; }
+  .avatar-hand {
+    transform-origin: 78px 118px;
+    animation: avatarWave 1.8s ease-in-out infinite;
+  }
+
+  @keyframes avatarBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  @keyframes avatarWave {
+    0%, 100% { transform: rotate(0deg); }
+    20%  { transform: rotate(-18deg); }
+    40%  { transform: rotate(6deg); }
+    60%  { transform: rotate(-14deg); }
+    80%  { transform: rotate(4deg); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .heart-btn, .heart-btn .heart-glow, .heart-hint, .welcome-content { animation: none !important; }
+    .heart-btn, .heart-btn .heart-glow, .heart-hint, .welcome-content,
+    .avatar-wrap, .avatar-hand { animation: none !important; }
   }
 </style>
 </head>
@@ -693,6 +720,57 @@
 <div class="welcome" id="welcome">
   <canvas id="welcome-hearts"></canvas>
   <div class="welcome-content">
+    <div class="avatar-wrap" aria-hidden="true">
+      <svg viewBox="0 0 156 156" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="78" cy="78" r="78" fill="#ffc9de"/>
+        <path d="M18 34 L26 42 M34 18 L42 26" stroke="#ffe08a" stroke-width="4" stroke-linecap="round"/>
+        <path d="M132 34 L124 42 M116 18 L108 26" stroke="#ffe08a" stroke-width="4" stroke-linecap="round"/>
+        <path d="M28 70 l4 8 l8 -3 l-6 7 l6 7 l-8 -3 l-4 8 l-1 -9 l-8 -3 l8 -3 z" fill="#ff8fb3"/>
+        <path d="M130 96 l3 6 l6 -2 l-4 5 l4 5 l-6 -2 l-3 6 l-1 -7 l-6 -2 l6 -2 z" fill="#ff8fb3"/>
+        <!-- cabelo (atrás) -->
+        <path d="M30 66 C28 118 34 140 46 150 L46 96 C46 78 36 74 30 66 Z" fill="#4a3327"/>
+        <path d="M126 66 C128 118 122 140 110 150 L110 96 C110 78 120 74 126 66 Z" fill="#4a3327"/>
+        <!-- pescoço + corpo -->
+        <rect x="64" y="108" width="28" height="16" rx="8" fill="#f3c7a4"/>
+        <path d="M40 156 C40 128 54 116 78 116 C102 116 116 128 116 156 Z" fill="#4a4550"/>
+        <!-- rosto -->
+        <ellipse cx="78" cy="86" rx="40" ry="38" fill="#f8d3ae"/>
+        <!-- cabelo (frente / franja) -->
+        <path d="M38 82 C36 48 54 28 78 28 C102 28 120 48 118 82 C112 62 100 66 96 52 C88 64 68 64 60 52 C56 66 44 62 38 82 Z" fill="#5a4030"/>
+        <path d="M40 60 C36 74 36 88 40 96 C38 82 40 68 44 60 Z" fill="#5a4030"/>
+        <path d="M116 60 C120 74 120 88 116 96 C118 82 116 68 112 60 Z" fill="#5a4030"/>
+        <!-- bochechas -->
+        <ellipse cx="55" cy="94" rx="7" ry="4.5" fill="#ffb3c6" opacity=".7"/>
+        <ellipse cx="101" cy="94" rx="7" ry="4.5" fill="#ffb3c6" opacity=".7"/>
+        <!-- olhos -->
+        <ellipse cx="61" cy="86" rx="9" ry="10" fill="#3b2a20"/>
+        <ellipse cx="95" cy="86" rx="9" ry="10" fill="#3b2a20"/>
+        <circle cx="64" cy="82" r="2.6" fill="#fff"/>
+        <circle cx="98" cy="82" r="2.6" fill="#fff"/>
+        <!-- sobrancelhas -->
+        <path d="M52 72 Q61 68 70 72" stroke="#5a4030" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M86 72 Q95 68 104 72" stroke="#5a4030" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- óculos -->
+        <circle cx="61" cy="86" r="16" fill="none" stroke="#7a4a2f" stroke-width="3.5"/>
+        <circle cx="95" cy="86" r="16" fill="none" stroke="#7a4a2f" stroke-width="3.5"/>
+        <path d="M77 86 h1" stroke="#7a4a2f" stroke-width="3.5"/>
+        <path d="M45 82 L34 78" stroke="#7a4a2f" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M111 82 L122 78" stroke="#7a4a2f" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- boca -->
+        <path d="M70 104 Q78 110 86 104" stroke="#c2705a" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- headset -->
+        <path d="M32 78 C32 44 52 22 78 22 C104 22 124 44 124 78" fill="none" stroke="#2e2b33" stroke-width="7" stroke-linecap="round"/>
+        <rect x="22" y="72" width="16" height="26" rx="7" fill="#2e2b33"/>
+        <rect x="118" y="72" width="16" height="26" rx="7" fill="#2e2b33"/>
+        <path d="M126 96 C126 106 120 110 112 110" fill="none" stroke="#2e2b33" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="110" cy="111" r="3.5" fill="#2e2b33"/>
+        <!-- braço acenando -->
+        <g class="avatar-hand">
+          <path d="M104 140 C114 132 118 118 112 104" stroke="#4a4550" stroke-width="14" stroke-linecap="round" fill="none"/>
+          <circle cx="112" cy="102" r="9" fill="#f3c7a4"/>
+        </g>
+      </svg>
+    </div>
     <div class="welcome-eyebrow">✨ Maria Eduarda ✨</div>
     <h1 class="welcome-title">
       Bem-vinda, meu amor 💗
