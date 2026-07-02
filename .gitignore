@@ -1,0 +1,7 @@
+# logs do servidor local
+_server.log
+_server.log.err
+
+# python
+__pycache__/
+*.pyc
