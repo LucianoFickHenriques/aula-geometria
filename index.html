@@ -693,7 +693,7 @@
 <div class="welcome" id="welcome">
   <canvas id="welcome-hearts"></canvas>
   <div class="welcome-content">
-    <div class="welcome-eyebrow">✨ Maria Eduarda Batista Moreira Costa ✨</div>
+    <div class="welcome-eyebrow">✨ Maria Eduarda ✨</div>
     <h1 class="welcome-title">
       Bem-vinda, meu amor 💗
       
@@ -717,6 +717,7 @@
   <a href="#pitagoras">Pitágoras</a>
   <a href="#triangulos">Triângulos</a>
   <a href="#circulos">Círculos</a>
+  <a href="#poligonos">Polígonos/Tales</a>
   <a href="#problemas">Problemas</a>
   <a href="#quiz">Quiz</a>
 </nav>
@@ -736,6 +737,7 @@
     <a href="#pitagoras">Teorema de Pitágoras</a>
     <a href="#triangulos">Triângulos</a>
     <a href="#circulos">Círculos</a>
+    <a href="#poligonos">Polígonos, Tales e Semelhança</a>
     <a href="#problemas">Problemas ENEM</a>
     <a href="#quiz">Quiz Rápido</a>
   </div>
@@ -1222,10 +1224,106 @@
 <div class="divider"></div>
 
 <!-- ════════════════════════════════════════
-     6. PROBLEMAS ENEM
+     6. POLÍGONOS, TALES E SEMELHANÇA
+═════════════════════════════════════════ -->
+<section id="poligonos">
+  <div class="section-label">Módulo 6</div>
+  <h2>Polígonos Regulares, Tales e Semelhança</h2>
+  <p class="section-intro">Três assuntos que aparecem toda edição do ENEM: polígonos com muitos lados, retas paralelas cortando transversais (Tales) e figuras "do mesmo formato" em tamanhos diferentes (semelhança).</p>
+
+  <!-- Polígonos regulares -->
+  <div class="card reveal">
+    <h3>🔶 Polígonos Regulares</h3>
+    <div class="two-col">
+      <div>
+        <p style="color:var(--muted); margin-bottom:16px;">Um polígono regular tem todos os lados e ângulos iguais. Duas fórmulas resolvem quase tudo:</p>
+        <div class="formula">Soma dos ângulos internos = (n − 2) × 180°</div>
+        <div class="formula">Ângulo interno = (n − 2) × 180° / n</div>
+        <div class="formula">Nº de diagonais = n(n − 3) / 2</div>
+        <p style="color:var(--muted); font-size:.9rem; margin-top:12px;">Onde <b>n</b> é o número de lados. Ex.: um hexágono (n=6) tem soma dos ângulos = 4×180° = 720°, e cada ângulo interno mede 720°/6 = 120°.</p>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="polyCanvas" width="280" height="220"></canvas>
+        <div class="canvas-label">Arraste para mudar o número de lados</div>
+        <div style="padding:0 16px 12px; width:100%">
+          <input type="range" id="polySides" min="3" max="12" value="6" style="width:100%">
+        </div>
+      </div>
+    </div>
+    <div class="result-box" style="margin-top:16px;">
+      Polígono de <strong id="polyN">6</strong> lados: soma dos ângulos internos = <strong id="polySum">720°</strong>,
+      ângulo interno = <strong id="polyEach">120°</strong>, diagonais = <strong id="polyDiag">9</strong>
+    </div>
+  </div>
+
+  <!-- Teorema de Tales -->
+  <div class="card reveal">
+    <h3>📏 Teorema de Tales</h3>
+    <div class="two-col">
+      <div>
+        <p style="color:var(--muted); margin-bottom:16px;">Quando retas paralelas são cortadas por duas retas transversais, os segmentos formados são <b>proporcionais</b>.</p>
+        <div class="formula">a / b = c / d</div>
+        <p style="color:var(--muted); font-size:.9rem; margin:12px 0;">É a base de muitos problemas de "sombra e altura" no ENEM: um poste e uma pessoa projetam sombras proporcionais às suas alturas.</p>
+        <ul class="steps">
+          <li>Identifique os dois pares de segmentos correspondentes.</li>
+          <li>Monte a proporção cruzando os valores.</li>
+          <li>Resolva a equação (multiplicação cruzada).</li>
+        </ul>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="talesCanvas" width="280" height="220"></canvas>
+        <div class="canvas-label" id="talesLabel">Retas paralelas cortadas por transversais</div>
+      </div>
+    </div>
+    <div class="enem-box" style="margin-top:20px;">
+      <div class="enem-tag">Problema tipo ENEM</div>
+      <p>Um poste de <b>4 m</b> de altura projeta uma sombra de <b>3 m</b>. No mesmo instante, uma pessoa projeta uma sombra de <b>1,5 m</b>. Qual é a altura da pessoa?</p>
+      <button class="btn" onclick="revealAnswer('talesAns')">Ver resolução</button>
+      <div class="answer-reveal" id="talesAns">
+        <ul class="steps">
+          <li>Monte a proporção: altura do poste / sombra do poste = altura da pessoa / sombra da pessoa</li>
+          <li>4 / 3 = h / 1,5</li>
+          <li>h = (4 × 1,5) / 3 = 6 / 3 = <b class="hl3">2 m</b></li>
+        </ul>
+        <div class="result-box" style="margin-top:8px;">A pessoa mede <strong>2 m</strong>. (Sombras no mesmo instante são sempre proporcionais às alturas!)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Semelhança de triângulos -->
+  <div class="card reveal">
+    <h3>🔺🔻 Semelhança de Triângulos</h3>
+    <div class="two-col">
+      <div class="canvas-wrap">
+        <canvas id="simCanvas" width="320" height="220"></canvas>
+        <div class="canvas-label">Triângulos semelhantes (mesmo formato, tamanhos diferentes)</div>
+      </div>
+      <div class="controls">
+        <p style="color:var(--muted); font-size:.9rem;">Dois triângulos são <b>semelhantes</b> quando têm os mesmos ângulos — os lados correspondentes são proporcionais na <b>razão de semelhança (k)</b>.</p>
+        <div class="formula">lado₂ = k × lado₁</div>
+        <div class="formula">Área₂ = k² × Área₁</div>
+        <div class="ctrl-row">
+          <label>Razão (k)</label>
+          <input type="range" id="simK" min="5" max="25" value="15">
+          <span class="val-badge" id="simKVal">1.5×</span>
+        </div>
+        <div class="result-box">
+          Triângulo pequeno: lado = <strong id="simSideA">6</strong> u &nbsp;|&nbsp; Área = <strong id="simAreaA"></strong> u²<br>
+          Triângulo grande: lado = <strong id="simSideB"></strong> u &nbsp;|&nbsp; Área = <strong id="simAreaB"></strong> u²
+        </div>
+        <p style="font-size:.85rem; color:var(--muted);">💡 Dica ENEM: se a razão dos lados é k, a razão das <b>áreas</b> é k² — um erro clássico é esquecer de elevar ao quadrado!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════
+     7. PROBLEMAS ENEM
 ═════════════════════════════════════════ -->
 <section id="problemas">
-  <div class="section-label">Módulo 6</div>
+  <div class="section-label">Módulo 7</div>
   <h2>Problemas no Estilo ENEM</h2>
   <p class="section-intro">O ENEM mistura figuras, contextos reais e álgebra. Pratique aqui com o tipo exato de problema que vai aparecer na prova.</p>
 
@@ -1318,9 +1416,9 @@
      7. QUIZ
 ═════════════════════════════════════════ -->
 <section id="quiz">
-  <div class="section-label">Módulo 7</div>
+  <div class="section-label">Módulo 8</div>
   <h2>Quiz Rápido</h2>
-  <p class="section-intro">Teste o que aprendeu! 8 questões no estilo ENEM. Sem pressão — você pode refazer quantas vezes quiser.</p>
+  <p class="section-intro">Teste o que aprendeu! 14 questões no estilo ENEM. Sem pressão — você pode refazer quantas vezes quiser.</p>
 
   <div class="card reveal" id="quizCard">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
@@ -2235,6 +2333,131 @@ drawTriangle('triObtCanvas',  [[30,180],[260,180],[200,60]],  '#c084fc');
 })();
 
 // ════════════════════════════════════════
+// POLÍGONOS REGULARES
+// ════════════════════════════════════════
+(function(){
+  const c=$('polyCanvas'), ctx=c.getContext('2d');
+  const sl=$('polySides');
+
+  function draw(){
+    const n=+sl.value;
+    const sum=(n-2)*180;
+    const each=sum/n;
+    const diag=n*(n-3)/2;
+    $('polyN').textContent=n;
+    $('polySum').textContent=sum+'°';
+    $('polyEach').textContent=each.toFixed(1)+'°';
+    $('polyDiag').textContent=diag;
+
+    ctx.clearRect(0,0,280,220);
+    const cx=140, cy=110, r=85;
+    ctx.beginPath();
+    for(let i=0;i<n;i++){
+      const a=i*2*Math.PI/n - Math.PI/2;
+      const x=cx+r*Math.cos(a), y=cy+r*Math.sin(a);
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.fillStyle='#ff5fa233'; ctx.strokeStyle='#ff5fa2'; ctx.lineWidth=2.5;
+    ctx.fill(); ctx.stroke();
+
+    // vértices
+    for(let i=0;i<n;i++){
+      const a=i*2*Math.PI/n - Math.PI/2;
+      const x=cx+r*Math.cos(a), y=cy+r*Math.sin(a);
+      ctx.beginPath(); ctx.arc(x,y,3.5,0,Math.PI*2); ctx.fillStyle='#c2317f'; ctx.fill();
+    }
+    ctx.fillStyle='#d6448a'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('n = '+n, cx, cy+r+26);
+  }
+
+  sl.addEventListener('input',draw);
+  draw();
+})();
+
+// ════════════════════════════════════════
+// TEOREMA DE TALES
+// ════════════════════════════════════════
+(function(){
+  const c=$('talesCanvas'), ctx=c.getContext('2d');
+  const W=280, H=220;
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    // três retas paralelas horizontais
+    const ys=[40,110,180];
+    ctx.strokeStyle='#8892b0'; ctx.lineWidth=2;
+    ys.forEach(y=>{ ctx.beginPath(); ctx.moveTo(20,y); ctx.lineTo(260,y); ctx.stroke(); });
+
+    // duas transversais
+    const t1=[[70,25],[95,195]];
+    const t2=[[190,25],[165,195]];
+    [t1,t2].forEach(t=>{
+      ctx.strokeStyle='#ff5fa2'; ctx.lineWidth=2.5;
+      ctx.beginPath(); ctx.moveTo(t[0][0],t[0][1]); ctx.lineTo(t[1][0],t[1][1]); ctx.stroke();
+    });
+
+    // marca os segmentos com cores diferentes (a, b na transversal 1)
+    ctx.font='bold 12px sans-serif'; ctx.textAlign='center';
+    ctx.fillStyle='#59d6a8';
+    ctx.fillText('a', (t1[0][0]+ (t1[0][0]+(t1[1][0]-t1[0][0])*0.42))/2 - 12, 78);
+    ctx.fillStyle='#ffb26b';
+    ctx.fillText('b', (t1[0][0]+(t1[1][0]-t1[0][0])*0.42 + t1[1][0])/2 - 6, 150);
+
+    ctx.fillStyle='#59d6a8';
+    ctx.fillText('c', (t2[0][0] + (t2[0][0]+(t2[1][0]-t2[0][0])*0.42))/2 + 12, 78);
+    ctx.fillStyle='#ffb26b';
+    ctx.fillText('d', (t2[0][0]+(t2[1][0]-t2[0][0])*0.42 + t2[1][0])/2 + 6, 150);
+  }
+  draw();
+})();
+
+// ════════════════════════════════════════
+// SEMELHANÇA DE TRIÂNGULOS
+// ════════════════════════════════════════
+(function(){
+  const c=$('simCanvas'), ctx=c.getContext('2d');
+  const sl=$('simK');
+  const baseSide=6; // lado do triângulo pequeno (unidades)
+  const baseArea=(baseSide*baseSide*Math.sqrt(3))/4;
+
+  function drawTri(cx, cy, side, color){
+    const h=side*Math.sqrt(3)/2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy-h*2/3);
+    ctx.lineTo(cx+side/2, cy+h/3);
+    ctx.lineTo(cx-side/2, cy+h/3);
+    ctx.closePath();
+    ctx.fillStyle=color+'33'; ctx.strokeStyle=color; ctx.lineWidth=2.5;
+    ctx.fill(); ctx.stroke();
+  }
+
+  function draw(){
+    const k=(+sl.value)/10;
+    $('simKVal').textContent=k.toFixed(1)+'×';
+    const sideB=baseSide*k;
+    const areaB=baseArea*k*k;
+    $('simSideA').textContent=baseSide;
+    $('simAreaA').textContent=baseArea.toFixed(1);
+    $('simSideB').textContent=sideB.toFixed(1);
+    $('simAreaB').textContent=areaB.toFixed(1);
+
+    ctx.clearRect(0,0,320,220);
+    const pxScale=14; // px por unidade
+    drawTri(90, 150, baseSide*pxScale, '#59d6a8');
+    drawTri(210, 150, Math.min(sideB*pxScale, 260), '#ff5fa2');
+
+    ctx.fillStyle='#59d6a8'; ctx.font='bold 12px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('pequeno', 90, 195);
+    ctx.fillStyle='#ff5fa2';
+    ctx.fillText('grande (k='+k.toFixed(1)+')', 210, 195);
+  }
+
+  sl.addEventListener('input',draw);
+  draw();
+})();
+
+// ════════════════════════════════════════
 // TERRENO CANVASES
 // ════════════════════════════════════════
 (function(){
@@ -2411,6 +2634,42 @@ const questions=[
     opts:['90°','270°','360°','180°'],
     answer:3,
     explain:'A soma dos ângulos internos de todo triângulo é sempre 180°.'
+  },
+  {
+    q:'Qual é a soma dos ângulos internos de um hexágono (6 lados)?',
+    opts:['360°','540°','720°','900°'],
+    answer:2,
+    explain:'Soma = (n−2)×180° = (6−2)×180° = 4×180° = 720°.'
+  },
+  {
+    q:'Um poste de 6 m projeta sombra de 4 m. No mesmo instante, uma pessoa projeta sombra de 2 m. Qual a altura da pessoa?',
+    opts:['2 m','3 m','4 m','1,5 m'],
+    answer:1,
+    explain:'Pelo Teorema de Tales: 6/4 = h/2 → h = (6×2)/4 = 3 m.'
+  },
+  {
+    q:'Dois triângulos semelhantes têm razão de semelhança k = 3. Se a área do menor é 10 m², qual é a área do maior?',
+    opts:['30 m²','13 m²','90 m²','33 m²'],
+    answer:2,
+    explain:'A razão das áreas é k² = 3² = 9. Área maior = 10 × 9 = 90 m².'
+  },
+  {
+    q:'Quantas diagonais tem um octógono (8 lados)?',
+    opts:['16','20','8','28'],
+    answer:1,
+    explain:'Diagonais = n(n−3)/2 = 8×5/2 = 20.'
+  },
+  {
+    q:'Retas paralelas cortadas por transversais formam segmentos proporcionais. Esse é o:',
+    opts:['Teorema de Pitágoras','Teorema de Tales','Teorema do ângulo externo','Teorema de Heron'],
+    answer:1,
+    explain:'O Teorema de Tales garante a proporcionalidade dos segmentos entre paralelas cortadas por transversais.'
+  },
+  {
+    q:'Qual é o ângulo interno de um pentágono regular (5 lados)?',
+    opts:['100°','108°','120°','135°'],
+    answer:1,
+    explain:'Ângulo interno = (n−2)×180°/n = (5−2)×180°/5 = 540°/5 = 108°.'
   }
 ];
 
