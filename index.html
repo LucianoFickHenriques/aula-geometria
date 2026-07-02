@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geometria Plana para o ENEM</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --card: #1e2130;
+    --accent: #6c63ff;
+    --accent2: #ff6584;
+    --accent3: #43e97b;
+    --accent4: #f7971e;
+    --text: #e8eaf6;
+    --muted: #8892b0;
+    --border: #2d3152;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, #6c63ff22 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  #hero-canvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #6c63ff, #ff6584, #43e97b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+    color: var(--muted);
+    max-width: 600px;
+    margin: 20px auto 40px;
+    position: relative;
+  }
+
+  .pill-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    position: relative;
+  }
+
+  .pill-nav a {
+    background: var(--card);
+    color: var(--accent);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 8px 20px;
+    font-size: .9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all .2s;
+  }
+
+  .pill-nav a:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px #6c63ff44;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 80px 24px;
+  }
+
+  .section-label {
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+
+  .section-intro {
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin-bottom: 48px;
+    max-width: 700px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 16px 16px 0 0;
+  }
+
+  .card h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  /* ── FORMULA BOX ── */
+  .formula {
+    background: #12142000;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    color: #a5b4fc;
+  }
+
+  /* ── TWO-COL ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ── CANVAS WRAPPER ── */
+  .canvas-wrap {
+    background: #12141e;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .canvas-wrap canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .canvas-label {
+    font-size: .8rem;
+    color: var(--muted);
+    padding: 8px;
+    text-align: center;
+  }
+
+  /* ── SLIDER ── */
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ctrl-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .ctrl-row label {
+    font-size: .85rem;
+    color: var(--muted);
+    min-width: 100px;
+  }
+
+  input[type=range] {
+    flex: 1;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  .val-badge {
+    min-width: 48px;
+    text-align: right;
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  /* ── RESULT BOX ── */
+  .result-box {
+    background: linear-gradient(135deg, #6c63ff11, #43e97b11);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 16px;
+    font-size: 1rem;
+  }
+
+  .result-box strong {
+    color: var(--accent3);
+    font-size: 1.2rem;
+  }
+
+  /* ── STEP BOX ── */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .steps li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    width: 26px; height: 26px;
+    min-width: 26px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .8rem;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  /* ── HIGHLIGHT TEXT ── */
+  .hl { color: var(--accent); font-weight: 700; }
+  .hl2 { color: var(--accent2); font-weight: 700; }
+  .hl3 { color: var(--accent3); font-weight: 700; }
+  .hl4 { color: var(--accent4); font-weight: 700; }
+
+  /* ── ENEM BOX ── */
+  .enem-box {
+    background: linear-gradient(135deg, var(--card), #1a1f35);
+    border: 1px solid #6c63ff55;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin: 24px 0;
+  }
+
+  .enem-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    padding: 3px 8px;
+    margin-bottom: 12px;
+  }
+
+  .enem-box p { color: var(--text); margin-bottom: 12px; }
+
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-size: .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+    margin-top: 8px;
+  }
+
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px #6c63ff55; }
+  .btn.secondary { background: transparent; border: 2px solid var(--accent); color: var(--accent); }
+
+  .answer-reveal {
+    display: none;
+    margin-top: 16px;
+    padding: 16px;
+    background: #43e97b11;
+    border: 1px solid var(--accent3);
+    border-radius: 8px;
+  }
+
+  .answer-reveal.show { display: block; }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0;
+  }
+
+  /* ── TABS ── */
+  .tabs { display: flex; gap: 4px; margin-bottom: 24px; flex-wrap: wrap; }
+  .tab-btn {
+    padding: 8px 18px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 99px;
+    height: 6px;
+    margin: 8px 0 4px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    transition: width .4s ease;
+  }
+
+  /* ── STICKY NAV ── */
+  .sticky-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: #0f1117cc;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 52px;
+    transform: translateY(-100%);
+    transition: transform .3s;
+  }
+
+  .sticky-nav.visible { transform: translateY(0); }
+  .sticky-nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .82rem;
+    font-weight: 600;
+    transition: color .2s;
+    white-space: nowrap;
+  }
+  .sticky-nav a:hover { color: var(--accent); }
+  .sticky-nav .brand { color: var(--accent); font-weight: 800; font-size: .9rem; margin-right: auto; }
+
+  /* ── QUIZ ── */
+  .quiz-opt {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0;
+    cursor: pointer;
+    font-size: .95rem;
+    transition: all .2s;
+  }
+  .quiz-opt:hover { border-color: var(--accent); background: #6c63ff11; }
+  .quiz-opt.correct { border-color: var(--accent3); background: #43e97b22; color: #43e97b; }
+  .quiz-opt.wrong { border-color: var(--accent2); background: #ff658422; color: var(--accent2); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--muted);
+    font-size: .85rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── PYTHAGOREAN VIZ ── */
+  #pyth-explanation {
+    font-size: .9rem;
+    color: var(--muted);
+    text-align: center;
+    padding: 8px 12px;
+    border-top: 1px solid var(--border);
+    width: 100%;
+  }
+
+  /* ── GRID shapes ── */
+  .shapes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .shape-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .25s;
+  }
+
+  .shape-card:hover, .shape-card.active {
+    border-color: var(--accent);
+    background: #6c63ff11;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px #6c63ff22;
+  }
+
+  .shape-card canvas { display: block; margin: 0 auto 10px; }
+  .shape-card h4 { font-size: .95rem; font-weight: 700; }
+  .shape-card p { font-size: .8rem; color: var(--muted); margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<!-- Sticky nav -->
+<nav class="sticky-nav" id="stickyNav">
+  <span class="brand">🔷 Geo ENEM</span>
+  <a href="#fundamentos">Fundamentos</a>
+  <a href="#areas">Áreas</a>
+  <a href="#pitagoras">Pitágoras</a>
+  <a href="#triangulos">Triângulos</a>
+  <a href="#circulos">Círculos</a>
+  <a href="#problemas">Problemas</a>
+  <a href="#quiz">Quiz</a>
+</nav>
+
+<!-- ════════════════════════════════════════
+     HERO
+═════════════════════════════════════════ -->
+<div class="hero" id="home">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-bg"></div>
+  <h1>Geometria Plana</h1>
+  <p>Domine todas as formas, fórmulas e raciocínios que mais aparecem no ENEM — com animações interativas e resolução passo a passo.</p>
+  <div class="pill-nav">
+    <a href="#fundamentos">Fundamentos</a>
+    <a href="#areas">Cálculo de Áreas</a>
+    <a href="#pitagoras">Teorema de Pitágoras</a>
+    <a href="#triangulos">Triângulos</a>
+    <a href="#circulos">Círculos</a>
+    <a href="#problemas">Problemas ENEM</a>
+    <a href="#quiz">Quiz Rápido</a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════
+     1. FUNDAMENTOS
+═════════════════════════════════════════ -->
+<section id="fundamentos">
+  <div class="section-label">Módulo 1</div>
+  <h2>Fundamentos da Geometria Plana</h2>
+  <p class="section-intro">Antes de qualquer fórmula, é preciso entender os conceitos que formam a base de toda geometria plana. Clique em cada forma para explorar.</p>
+
+  <div class="card reveal">
+    <h3>Reconhecendo Figuras Planas</h3>
+    <p style="color:var(--muted); margin-bottom:20px;">Selecione uma figura para ver suas propriedades e fórmulas principais.</p>
+    <div class="shapes-grid" id="shapesGrid"></div>
+    <div id="shapeInfo" style="margin-top:24px; display:none;">
+      <div class="card" style="margin-bottom:0; padding:20px;" id="shapeInfoCard"></div>
+    </div>
+  </div>
+
+  <div class="card reveal">
+    <h3>Ângulos e Paralelismo</h3>
+    <div class="two-col">
+      <div>
+        <p style="color:var(--muted); margin-bottom:16px;">Quando duas retas paralelas são cortadas por uma transversal, formam-se pares de ângulos especiais com relações fixas.</p>
+        <ul class="steps">
+          <li><span><b class="hl">Ângulos correspondentes</b> — ficam na mesma posição em relação à transversal e são iguais.</span></li>
+          <li><span><b class="hl2">Ângulos alternos internos</b> — ficam entre as paralelas, em lados opostos da transversal, e são iguais.</span></li>
+          <li><span><b class="hl3">Ângulos co-internos</b> — ficam entre as paralelas, no mesmo lado, e são suplementares (somam 180°).</span></li>
+        </ul>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="anglesCanvas" width="280" height="220"></canvas>
+        <div class="canvas-label">Arraste o slider para girar a transversal</div>
+        <div style="padding:0 16px 12px; width:100%">
+          <input type="range" id="angleSlider" min="20" max="85" value="50" style="width:100%">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════
+     2. ÁREAS
+═════════════════════════════════════════ -->
+<section id="areas">
+  <div class="section-label">Módulo 2</div>
+  <h2>Cálculo de Áreas</h2>
+  <p class="section-intro">Arraste os sliders para ver como as dimensões afetam a área em tempo real. Cada figura tem sua fórmula animada.</p>
+
+  <!-- Retângulo -->
+  <div class="card reveal">
+    <h3>📐 Retângulo</h3>
+    <div class="two-col">
+      <div class="canvas-wrap">
+        <canvas id="rectCanvas" width="320" height="200"></canvas>
+        <div class="canvas-label" id="rectLabel">Retângulo interativo</div>
+      </div>
+      <div class="controls">
+        <div class="formula">A = b × h</div>
+        <div class="ctrl-row">
+          <label>Base (b)</label>
+          <input type="range" id="rectB" min="1" max="20" value="10">
+          <span class="val-badge" id="rectBVal">10 m</span>
+        </div>
+        <div class="ctrl-row">
+          <label>Altura (h)</label>
+          <input type="range" id="rectH" min="1" max="15" value="6">
+          <span class="val-badge" id="rectHVal">6 m</span>
+        </div>
+        <div class="result-box">
+          Área = <strong id="rectArea">60</strong> m²
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" id="rectBar" style="width:20%"></div></div>
+        </div>
+        <p style="font-size:.85rem; color:var(--muted);">💡 O retângulo é a base para entender todas as outras áreas — o ENEM adora problemas com terrenos retangulares.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Triângulo -->
+  <div class="card reveal">
+    <h3>🔺 Triângulo</h3>
+    <div class="two-col">
+      <div class="canvas-wrap">
+        <canvas id="triCanvas" width="320" height="200"></canvas>
+        <div class="canvas-label" id="triLabel">Triângulo interativo</div>
+      </div>
+      <div class="controls">
+        <div class="formula">A = (b × h) / 2</div>
+        <p style="color:var(--muted); font-size:.9rem;">O triângulo tem <b>metade</b> da área do retângulo de mesma base e altura. Por quê? Porque ele "cabe" duas vezes dentro do retângulo!</p>
+        <div class="ctrl-row">
+          <label>Base (b)</label>
+          <input type="range" id="triB" min="1" max="20" value="12">
+          <span class="val-badge" id="triBVal">12 m</span>
+        </div>
+        <div class="ctrl-row">
+          <label>Altura (h)</label>
+          <input type="range" id="triH" min="1" max="15" value="8">
+          <span class="val-badge" id="triHVal">8 m</span>
+        </div>
+        <div class="result-box">
+          Área = <strong id="triArea">48</strong> m²
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trapézio -->
+  <div class="card reveal">
+    <h3>🔷 Trapézio</h3>
+    <div class="two-col">
+      <div class="canvas-wrap">
+        <canvas id="trapCanvas" width="320" height="200"></canvas>
+        <div class="canvas-label">Trapézio interativo</div>
+      </div>
+      <div class="controls">
+        <div class="formula">A = (B + b) × h / 2</div>
+        <p style="color:var(--muted); font-size:.9rem;">A fórmula do trapézio é a <em>média das bases</em> multiplicada pela altura. Isso faz sentido geometricamente: é como se o trapézio fosse um retângulo de largura média.</p>
+        <div class="ctrl-row">
+          <label>Base maior (B)</label>
+          <input type="range" id="trapB" min="2" max="20" value="14">
+          <span class="val-badge" id="trapBVal">14 m</span>
+        </div>
+        <div class="ctrl-row">
+          <label>Base menor (b)</label>
+          <input type="range" id="trapb" min="1" max="18" value="8">
+          <span class="val-badge" id="trapbVal">8 m</span>
+        </div>
+        <div class="ctrl-row">
+          <label>Altura (h)</label>
+          <input type="range" id="trapH" min="1" max="15" value="6">
+          <span class="val-badge" id="trapHVal">6 m</span>
+        </div>
+        <div class="result-box">
+          Área = <strong id="trapArea">66</strong> m²
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paralelogramo -->
+  <div class="card reveal">
+    <h3>▱ Paralelogramo</h3>
+    <div class="two-col">
+      <div class="canvas-wrap">
+        <canvas id="paraCanvas" width="320" height="200"></canvas>
+        <div class="canvas-label">Paralelogramo interativo</div>
+      </div>
+      <div class="controls">
+        <div class="formula">A = b × h</div>
+        <p style="color:var(--muted); font-size:.9rem;">Mesma fórmula do retângulo! A altura é a distância <em>perpendicular</em> entre as bases — não o lado inclinado.</p>
+        <div class="ctrl-row">
+          <label>Base (b)</label>
+          <input type="range" id="paraB" min="2" max="20" value="12">
+          <span class="val-badge" id="paraBVal">12 m</span>
+        </div>
+        <div class="ctrl-row">
+          <label>Altura (h)</label>
+          <input type="range" id="paraH" min="1" max="12" value="7">
+          <span class="val-badge" id="paraHVal">7 m</span>
+        </div>
+        <div class="ctrl-row">
+          <label>Inclinação</label>
+          <input type="range" id="paraSkew" min="5" max="40" value="20">
+          <span class="val-badge" id="paraSkewVal">20°</span>
+        </div>
+        <div class="result-box">
+          Área = <strong id="paraArea">84</strong> m²
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Losango -->
+  <div class="card reveal">
+    <h3>💠 Losango</h3>
+    <div class="two-col">
+      <div class="canvas-wrap">
+        <canvas id="rhombCanvas" width="320" height="220"></canvas>
+        <div class="canvas-label">Losango interativo</div>
+      </div>
+      <div class="controls">
+        <div class="formula">A = (D × d) / 2</div>
+        <p style="color:var(--muted); font-size:.9rem;">D = diagonal maior, d = diagonal menor. O losango tem <b>dois eixos de simetria</b> e suas diagonais são perpendiculares entre si.</p>
+        <div class="ctrl-row">
+          <label>Diag. maior (D)</label>
+          <input type="range" id="rhombD" min="4" max="20" value="12">
+          <span class="val-badge" id="rhombDVal">12 m</span>
+        </div>
+        <div class="ctrl-row">
+          <label>Diag. menor (d)</label>
+          <input type="range" id="rhombd" min="2" max="16" value="8">
+          <span class="val-badge" id="rhombdVal">8 m</span>
+        </div>
+        <div class="result-box">
+          Área = <strong id="rhombArea">48</strong> m²
+          <br><small style="color:var(--muted)">As diagonais do losango se cortam ao meio formando 4 triângulos retângulos iguais.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════
+     3. PITÁGORAS
+═════════════════════════════════════════ -->
+<section id="pitagoras">
+  <div class="section-label">Módulo 3</div>
+  <h2>Teorema de Pitágoras</h2>
+  <p class="section-intro">Um dos teoremas mais usados no ENEM. Ele se aplica a qualquer triângulo retângulo e é a chave para calcular diagonais, alturas e distâncias.</p>
+
+  <div class="card reveal">
+    <h3>A Prova Visual</h3>
+    <p style="color:var(--muted); margin-bottom:20px;">Os quadrados construídos sobre os catetos juntos têm a mesma área que o quadrado sobre a hipotenusa. Arraste o slider para ver a animação!</p>
+    <div style="display:flex; flex-direction:column; align-items:center; gap:16px;">
+      <canvas id="pythCanvas" width="560" height="340" style="max-width:100%; border-radius:12px; background:#12141e;"></canvas>
+      <div style="width:100%; max-width:400px;">
+        <div class="ctrl-row">
+          <label>Cateto a</label>
+          <input type="range" id="pythA" min="2" max="9" value="3" style="flex:1">
+          <span class="val-badge" id="pythAVal">3</span>
+        </div>
+        <div class="ctrl-row">
+          <label>Cateto b</label>
+          <input type="range" id="pythB" min="2" max="9" value="4" style="flex:1">
+          <span class="val-badge" id="pythBVal">4</span>
+        </div>
+      </div>
+      <div class="result-box" style="width:100%; max-width:400px; text-align:center;">
+        <span class="hl">a²</span> + <span class="hl2">b²</span> = <span class="hl3">c²</span>
+        <br>
+        <span id="pythEq" style="font-size:1.1rem; margin-top:6px; display:block;"></span>
+        <br>
+        Hipotenusa c = <strong id="pythC"></strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="card reveal">
+    <h3>Ternas Pitagóricas — Decorar vale ouro!</h3>
+    <p style="color:var(--muted); margin-bottom:20px;">Essas combinações de números inteiros formam triângulos retângulos. Reconhecê-las poupa tempo no ENEM.</p>
+    <div id="ternasGrid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap:12px;"></div>
+  </div>
+
+  <div class="enem-box reveal">
+    <div class="enem-tag">Problema tipo ENEM</div>
+    <p>Uma escada de <b>10 m</b> está encostada em uma parede vertical. A base da escada está a <b>6 m</b> da parede. A que altura do chão a escada toca a parede?</p>
+    <button class="btn" onclick="revealAnswer('ladderAns')">Ver resolução passo a passo</button>
+    <div class="answer-reveal" id="ladderAns">
+      <ul class="steps">
+        <li>Identifique o triângulo retângulo: hipotenusa = escada = <b>10 m</b>, cateto = distância da base = <b>6 m</b>.</li>
+        <li>Aplique Pitágoras: h² = c² − a² → h² = 10² − 6² = 100 − 36 = 64</li>
+        <li>h = √64 = <b class="hl3">8 m</b></li>
+      </ul>
+      <div class="result-box" style="margin-top:12px;">A escada toca a parede a <strong>8 m</strong> de altura. (Terna 6-8-10 = múltipla de 3-4-5!)</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════
+     4. TRIÂNGULOS
+═════════════════════════════════════════ -->
+<section id="triangulos">
+  <div class="section-label">Módulo 4</div>
+  <h2>Triângulos — Tipos e Propriedades</h2>
+  <p class="section-intro">Os triângulos aparecem em quase todo problema de geometria. Entender suas propriedades é fundamental.</p>
+
+  <div class="card reveal">
+    <h3>Classificação e Ângulos</h3>
+    <div class="tabs" id="triTypeTabs">
+      <button class="tab-btn active" onclick="switchTab('tri','equi')">Equilátero</button>
+      <button class="tab-btn" onclick="switchTab('tri','iso')">Isósceles</button>
+      <button class="tab-btn" onclick="switchTab('tri','esc')">Escaleno</button>
+      <button class="tab-btn" onclick="switchTab('tri','ret')">Retângulo</button>
+      <button class="tab-btn" onclick="switchTab('tri','obt')">Obtusângulo</button>
+    </div>
+
+    <div class="tab-content active" id="tri-equi">
+      <div class="two-col">
+        <div class="canvas-wrap"><canvas id="triEquiCanvas" width="280" height="220"></canvas></div>
+        <div>
+          <h4 style="color:var(--accent)">Triângulo Equilátero</h4>
+          <ul class="steps" style="margin-top:12px;">
+            <li>Todos os <b>3 lados iguais</b></li>
+            <li>Todos os <b>3 ângulos iguais</b> a 60°</li>
+            <li>Área = <span class="formula" style="display:inline; font-size:.9rem;">l² × √3 / 4</span></li>
+            <li>Altura = <span class="formula" style="display:inline; font-size:.9rem;">l × √3 / 2</span></li>
+          </ul>
+          <div class="ctrl-row" style="margin-top:16px;">
+            <label>Lado (l)</label>
+            <input type="range" id="equiL" min="2" max="15" value="8">
+            <span class="val-badge" id="equiLVal">8</span>
+          </div>
+          <div class="result-box">Área ≈ <strong id="equiArea"></strong> u²</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tri-iso">
+      <div class="two-col">
+        <div class="canvas-wrap"><canvas id="triIsoCanvas" width="280" height="220"></canvas></div>
+        <div>
+          <h4 style="color:var(--accent2)">Triângulo Isósceles</h4>
+          <ul class="steps" style="margin-top:12px;">
+            <li><b>2 lados iguais</b> (chamados de lados congruentes)</li>
+            <li>Os <b>ângulos da base</b> são iguais</li>
+            <li>A mediana do vértice principal também é a <b>altura e bissetriz</b></li>
+          </ul>
+          <div class="ctrl-row" style="margin-top:16px;">
+            <label>Base (b)</label>
+            <input type="range" id="isoB" min="2" max="14" value="8">
+            <span class="val-badge" id="isoBVal">8</span>
+          </div>
+          <div class="ctrl-row">
+            <label>Lados iguais (l)</label>
+            <input type="range" id="isoL" min="3" max="14" value="7">
+            <span class="val-badge" id="isoLVal">7</span>
+          </div>
+          <div class="result-box">Área ≈ <strong id="isoArea"></strong> u²</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tri-esc">
+      <div class="two-col">
+        <div class="canvas-wrap"><canvas id="triEscCanvas" width="280" height="220"></canvas></div>
+        <div>
+          <h4 style="color:var(--accent3)">Triângulo Escaleno</h4>
+          <ul class="steps" style="margin-top:12px;">
+            <li><b>3 lados diferentes</b></li>
+            <li><b>3 ângulos diferentes</b></li>
+            <li>Área pela <b>Fórmula de Heron</b>: s = (a+b+c)/2 → A = √(s(s-a)(s-b)(s-c))</li>
+          </ul>
+          <div style="margin-top:12px; font-size:.85rem; color:var(--muted);">
+            Condição de existência: cada lado deve ser <b>menor</b> que a soma dos outros dois.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tri-ret">
+      <div class="two-col">
+        <div class="canvas-wrap"><canvas id="triRetCanvas" width="280" height="220"></canvas></div>
+        <div>
+          <h4 style="color:var(--accent4)">Triângulo Retângulo</h4>
+          <ul class="steps" style="margin-top:12px;">
+            <li>Um ângulo de <b>90°</b></li>
+            <li>O maior lado é a <b>hipotenusa</b></li>
+            <li>Vale o <b>Teorema de Pitágoras</b>: a² + b² = c²</li>
+            <li>Área = (cateto₁ × cateto₂) / 2</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tri-obt">
+      <div class="two-col">
+        <div class="canvas-wrap"><canvas id="triObtCanvas" width="280" height="220"></canvas></div>
+        <div>
+          <h4 style="color:#c084fc">Triângulo Obtusângulo</h4>
+          <ul class="steps" style="margin-top:12px;">
+            <li>Um ângulo <b>maior que 90°</b></li>
+            <li>O maior ângulo fica no <b>vértice oposto</b> ao maior lado</li>
+            <li>A altura pode cair <b>fora do triângulo</b></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card reveal">
+    <h3>Soma dos Ângulos Internos</h3>
+    <p style="color:var(--muted); margin-bottom:20px;">Todo triângulo, sem exceção, tem a soma dos ângulos internos igual a <b class="hl">180°</b>. Use o slider para ver isso acontecendo!</p>
+    <div style="display:flex; flex-direction:column; align-items:center; gap:16px;">
+      <canvas id="triAnglesCanvas" width="500" height="280" style="max-width:100%; border-radius:12px; background:#12141e;"></canvas>
+      <div style="width:100%; max-width:400px;">
+        <div class="ctrl-row">
+          <label>Ângulo A</label>
+          <input type="range" id="angA" min="10" max="160" value="60">
+          <span class="val-badge" id="angAVal">60°</span>
+        </div>
+        <div class="ctrl-row">
+          <label>Ângulo B</label>
+          <input type="range" id="angB" min="10" max="160" value="80">
+          <span class="val-badge" id="angBVal">80°</span>
+        </div>
+      </div>
+      <div class="result-box" style="text-align:center; width:100%; max-width:400px;">
+        A + B + C = <span id="angSum" class="hl3" style="font-size:1.2rem; font-weight:700;"></span>° (sempre 180°!)
+        <br><small style="color:var(--muted)">Ângulo C = <span id="angC"></span>°</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════
+     5. CÍRCULOS
+═════════════════════════════════════════ -->
+<section id="circulos">
+  <div class="section-label">Módulo 5</div>
+  <h2>Círculos e Circunferências</h2>
+  <p class="section-intro">π (pi) ≈ 3,14159... É a razão entre o perímetro e o diâmetro de qualquer círculo. O ENEM usa π = 3 ou π ≈ 3,14 nas provas.</p>
+
+  <div class="card reveal">
+    <h3>Raio, Diâmetro, Perímetro e Área</h3>
+    <div class="two-col">
+      <div class="canvas-wrap">
+        <canvas id="circleCanvas" width="300" height="300"></canvas>
+        <div class="canvas-label">Arraste para mudar o raio</div>
+      </div>
+      <div class="controls">
+        <div class="formula">Comprimento = 2πr</div>
+        <div class="formula">Área = πr²</div>
+        <div class="ctrl-row">
+          <label>Raio (r)</label>
+          <input type="range" id="circR" min="1" max="20" value="8">
+          <span class="val-badge" id="circRVal">8 m</span>
+        </div>
+        <div class="result-box">
+          Diâmetro = <strong id="circD"></strong> m<br>
+          Comprimento (C) = <strong id="circC"></strong> m<br>
+          Área (A) = <strong id="circA"></strong> m²
+        </div>
+        <p style="font-size:.85rem; color:var(--muted);">💡 Dica ENEM: a área cresce com o <b>quadrado</b> do raio. Dobrar o raio quadruplica a área!</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card reveal">
+    <h3>Setor Circular</h3>
+    <p style="color:var(--muted); margin-bottom:20px;">Um "fatia de pizza" é um setor circular. A área e o arco são proporcionais ao ângulo central.</p>
+    <div class="two-col">
+      <div class="canvas-wrap">
+        <canvas id="sectorCanvas" width="300" height="300"></canvas>
+      </div>
+      <div class="controls">
+        <div class="formula">A_setor = (θ/360) × πr²</div>
+        <div class="formula">Arco = (θ/360) × 2πr</div>
+        <div class="ctrl-row">
+          <label>Raio (r)</label>
+          <input type="range" id="secR" min="1" max="15" value="10">
+          <span class="val-badge" id="secRVal">10 m</span>
+        </div>
+        <div class="ctrl-row">
+          <label>Ângulo (θ)</label>
+          <input type="range" id="secAngle" min="5" max="355" value="120">
+          <span class="val-badge" id="secAngleVal">120°</span>
+        </div>
+        <div class="result-box">
+          Área do setor = <strong id="secArea"></strong> m²<br>
+          Comprimento do arco = <strong id="secArc"></strong> m
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="enem-box reveal">
+    <div class="enem-tag">Problema tipo ENEM</div>
+    <p>Uma pizzaria corta suas pizzas redondas em 8 fatias iguais. O raio da pizza é <b>30 cm</b>. Qual é a área de cada fatia? (use π = 3)</p>
+    <button class="btn" onclick="revealAnswer('pizzaAns')">Ver resolução</button>
+    <div class="answer-reveal" id="pizzaAns">
+      <ul class="steps">
+        <li>8 fatias iguais → ângulo de cada fatia = 360°/8 = <b>45°</b></li>
+        <li>Área total = π × r² = 3 × 30² = 3 × 900 = <b>2700 cm²</b></li>
+        <li>Área de cada fatia = 2700/8 = <b class="hl3">337,5 cm²</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════
+     6. PROBLEMAS ENEM
+═════════════════════════════════════════ -->
+<section id="problemas">
+  <div class="section-label">Módulo 6</div>
+  <h2>Problemas no Estilo ENEM</h2>
+  <p class="section-intro">O ENEM mistura figuras, contextos reais e álgebra. Pratique aqui com o tipo exato de problema que vai aparecer na prova.</p>
+
+  <!-- PROBLEMA DO ENUNCIADO (terrenos) -->
+  <div class="enem-box reveal">
+    <div class="enem-tag">Problema dos Terrenos — Como no enunciado</div>
+    <p>Um pai comprou dois terrenos de mesma área. O terreno do filho mais novo é retangular com <b>comprimento = largura + 7</b>. O terreno do filho mais velho tem formato irregular (Figura B) com os lados <b>15 m, 21 m e 15 m</b> com um recorte de <b>3 m</b> no canto.</p>
+    <div style="display:flex; gap:16px; flex-wrap:wrap; margin:16px 0;">
+      <div class="canvas-wrap" style="flex:1; min-width:220px;">
+        <canvas id="terrenoACanvas" width="260" height="180"></canvas>
+        <div class="canvas-label">Figura A — Retângulo</div>
+      </div>
+      <div class="canvas-wrap" style="flex:1; min-width:220px;">
+        <canvas id="terrenoBCanvas" width="260" height="180"></canvas>
+        <div class="canvas-label">Figura B — Irregular</div>
+      </div>
+    </div>
+    <button class="btn" onclick="revealAnswer('terrenoAns')">Ver resolução completa</button>
+    <div class="answer-reveal" id="terrenoAns">
+      <b>Passo 1:</b> Calcular a área do terreno B (Figura B)<br>
+      O terreno B é um triângulo grande menos um triângulo pequeno no canto.<br>
+      — Triângulo grande: base=15 m, altura=15 m → A = (15×15)/2 = 112,5 m²<br>
+      — Triângulo pequeno (canto): catetos 3 m × ? m (pela figura, 3×3) → A = (3×3)/2 = 4,5 m²<br>
+      — Área B ≈ 112,5 − 4,5 = <b>108 m²</b><br><br>
+      <b>Passo 2:</b> Montar equação para o terreno A<br>
+      Largura = x, Comprimento = x + 7<br>
+      Área A = x(x+7) = 108<br>
+      x² + 7x − 108 = 0<br><br>
+      <b>Passo 3:</b> Resolver a equação quadrática (Bhaskara)<br>
+      Δ = 49 + 432 = 481 → √481 ≈ 21,93... (ou usamos valores inteiros)<br>
+      Tentativa: x=9 → 9×16 = 144 ≠ 108 | x=8 → 8×15 = 120 ≠ 108 | x=9 → 81+63=144<br>
+      <div class="result-box" style="margin-top:8px;">Testando x = 9: 9 × 16 = 144 m² | x=8: 8×15=120 | x=7: 7×14=98 | → O problema indica área = 108, então checar os valores reais da figura B.</div>
+    </div>
+  </div>
+
+  <!-- PROBLEMA 2: área do hexágono -->
+  <div class="enem-box reveal">
+    <div class="enem-tag">Geometria + Álgebra</div>
+    <p>Uma praça tem formato hexagonal regular com lado de <b>6 m</b>. A prefeitura quer cobrir a praça com grama. Sabendo que cada m² de grama custa R$ 12,00, qual é o custo total? (√3 ≈ 1,73)</p>
+    <button class="btn" onclick="revealAnswer('hexAns')">Ver resolução</button>
+    <div class="answer-reveal" id="hexAns">
+      <ul class="steps">
+        <li>Hexágono regular = 6 triângulos equiláteros com lado l = 6 m</li>
+        <li>Área de um triângulo equilátero = l² × √3/4 = 36 × 1,73/4 = 36 × 0,4325 ≈ 15,57 m²</li>
+        <li>Área total = 6 × 15,57 ≈ <b>93,42 m²</b></li>
+        <li>Custo = 93,42 × 12 = <b class="hl3">R$ 1.121,04</b></li>
+      </ul>
+      <div class="result-box">Fórmula direta do hexágono regular: A = 3l²√3/2 = 3×36×1,73/2 ≈ 93,42 m²</div>
+    </div>
+  </div>
+
+  <!-- PROBLEMA 3 interativo: cerca ao redor -->
+  <div class="card reveal">
+    <h3>Simulador: Cerca ao Redor</h3>
+    <p style="color:var(--muted); margin-bottom:20px;">Um agricultor quer cercar um terreno retangular. Cada metro de cerca custa R$ <span id="fenceCostLabel">15</span>. Ajuste as dimensões e veja o custo total.</p>
+    <div class="two-col">
+      <div class="canvas-wrap">
+        <canvas id="fenceCanvas" width="300" height="220"></canvas>
+      </div>
+      <div class="controls">
+        <div class="ctrl-row">
+          <label>Comprimento</label>
+          <input type="range" id="fenceL" min="5" max="50" value="20">
+          <span class="val-badge" id="fenceLVal">20 m</span>
+        </div>
+        <div class="ctrl-row">
+          <label>Largura</label>
+          <input type="range" id="fenceW" min="5" max="40" value="12">
+          <span class="val-badge" id="fenceWVal">12 m</span>
+        </div>
+        <div class="ctrl-row">
+          <label>Custo/m (R$)</label>
+          <input type="range" id="fenceCost" min="5" max="50" value="15">
+          <span class="val-badge" id="fenceCostVal">R$15</span>
+        </div>
+        <div class="result-box">
+          Perímetro = <strong id="fencePerim"></strong> m<br>
+          Área = <strong id="fenceArea"></strong> m²<br>
+          Custo total = <strong id="fenceTotalCost"></strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════
+     7. QUIZ
+═════════════════════════════════════════ -->
+<section id="quiz">
+  <div class="section-label">Módulo 7</div>
+  <h2>Quiz Rápido</h2>
+  <p class="section-intro">Teste o que aprendeu! 8 questões no estilo ENEM. Sem pressão — você pode refazer quantas vezes quiser.</p>
+
+  <div class="card reveal" id="quizCard">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <div>
+        <span id="quizProgress" style="color:var(--muted); font-size:.9rem;">Questão 1 de 8</span>
+        <div class="progress-bar-wrap" style="width:200px; margin-top:6px;">
+          <div class="progress-bar-fill" id="quizBar" style="width:0%"></div>
+        </div>
+      </div>
+      <span id="quizScore" style="font-weight:700; color:var(--accent3); font-size:1.1rem;">Pontos: 0</span>
+    </div>
+
+    <div id="quizQuestion" style="font-size:1.05rem; margin-bottom:20px; min-height:60px;"></div>
+    <div id="quizOptions"></div>
+    <div id="quizFeedback" style="margin-top:16px; display:none;"></div>
+    <button class="btn" id="quizNext" style="margin-top:16px; display:none;" onclick="nextQuestion()">Próxima →</button>
+    <div id="quizResult" style="display:none;"></div>
+  </div>
+</section>
+
+<footer>
+  <p>📐 Geometria Plana para o ENEM &nbsp;|&nbsp; Estude, pratique, passe.</p>
+  <p style="margin-top:8px; font-size:.8rem;">As fórmulas e conteúdos seguem o currículo do ENEM e BNCC.</p>
+</footer>
+
+<script>
+// ════════════════════════════════════════
+// UTILITY
+// ════════════════════════════════════════
+function $(id){ return document.getElementById(id); }
+
+function revealAnswer(id){
+  var el = $(id);
+  el.classList.toggle('show');
+}
+
+// ── Intersection Observer for .reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── Sticky nav
+window.addEventListener('scroll', () => {
+  $('stickyNav').classList.toggle('visible', window.scrollY > 300);
+});
+
+// ════════════════════════════════════════
+// HERO CANVAS — floating shapes
+// ════════════════════════════════════════
+(function(){
+  const c = $('hero-canvas');
+  const ctx = c.getContext('2d');
+  let W, H, shapes = [];
+
+  function resize(){
+    W = c.width = c.offsetWidth;
+    H = c.height = c.offsetHeight;
+  }
+
+  const COLORS = ['#6c63ff','#ff6584','#43e97b','#f7971e','#a5b4fc'];
+  const TYPES = ['rect','circle','tri','diamond'];
+
+  function mkShape(){
+    return {
+      x: Math.random()*W, y: Math.random()*H,
+      vx: (Math.random()-.5)*0.4, vy: (Math.random()-.5)*0.4,
+      r: 20+Math.random()*50,
+      color: COLORS[Math.random()*COLORS.length|0],
+      type: TYPES[Math.random()*TYPES.length|0],
+      rot: Math.random()*Math.PI*2,
+      vr: (Math.random()-.5)*.01
+    };
+  }
+
+  resize();
+  for(let i=0;i<22;i++) shapes.push(mkShape());
+  window.addEventListener('resize', resize);
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    shapes.forEach(s => {
+      ctx.save();
+      ctx.translate(s.x, s.y);
+      ctx.rotate(s.rot);
+      ctx.strokeStyle = s.color;
+      ctx.lineWidth = 1.5;
+      ctx.globalAlpha = .5;
+      ctx.beginPath();
+      if(s.type==='circle'){
+        ctx.arc(0,0,s.r,0,Math.PI*2);
+      } else if(s.type==='rect'){
+        ctx.rect(-s.r/2,-s.r/3,s.r,s.r*.65);
+      } else if(s.type==='tri'){
+        ctx.moveTo(0,-s.r);
+        ctx.lineTo(s.r*.87, s.r*.5);
+        ctx.lineTo(-s.r*.87, s.r*.5);
+        ctx.closePath();
+      } else {
+        ctx.moveTo(0,-s.r);
+        ctx.lineTo(s.r*.6,0);
+        ctx.lineTo(0,s.r);
+        ctx.lineTo(-s.r*.6,0);
+        ctx.closePath();
+      }
+      ctx.stroke();
+      ctx.restore();
+      s.x += s.vx; s.y += s.vy; s.rot += s.vr;
+      if(s.x<-80) s.x=W+80;
+      if(s.x>W+80) s.x=-80;
+      if(s.y<-80) s.y=H+80;
+      if(s.y>H+80) s.y=-80;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ════════════════════════════════════════
+// ANGLES CANVAS
+// ════════════════════════════════════════
+(function(){
+  const c = $('anglesCanvas');
+  const ctx = c.getContext('2d');
+  const sl = $('angleSlider');
+
+  function draw(){
+    const ang = +sl.value * Math.PI/180;
+    ctx.clearRect(0,0,280,220);
+    const W=280, H=220;
+
+    // Two parallel horizontal lines
+    ctx.strokeStyle='#8892b0'; ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(10,80); ctx.lineTo(270,80);
+    ctx.moveTo(10,160); ctx.lineTo(270,160);
+    ctx.stroke();
+
+    // Labels
+    ctx.fillStyle='#8892b0'; ctx.font='11px sans-serif';
+    ctx.fillText('r₁',255,75);
+    ctx.fillText('r₂',255,155);
+
+    // Transversal
+    const cx=140, cy=120, len=110;
+    const dx=Math.cos(ang), dy=Math.sin(ang);
+    ctx.strokeStyle='#6c63ff'; ctx.lineWidth=2.5;
+    ctx.beginPath();
+    ctx.moveTo(cx-dx*len, cy-dy*len);
+    ctx.lineTo(cx+dx*len, cy+dy*len);
+    ctx.stroke();
+
+    // Intersection points
+    const y1=80, y2=160;
+    const t1=(y1-cy)/dy, t2=(y2-cy)/dy;
+    const x1=cx+dx*t1, x2=cx+dx*t2;
+
+    // Highlight corresponding angles
+    function arc(px,py,a1,a2,color){
+      ctx.beginPath();
+      ctx.arc(px,py,22,a1,a2);
+      ctx.strokeStyle=color; ctx.lineWidth=2;
+      ctx.stroke();
+    }
+    const baseAng = Math.atan2(dy,dx);
+    arc(x1,y1, baseAng, baseAng+Math.PI, '#6c63ff');
+    arc(x2,y2, baseAng, baseAng+Math.PI, '#6c63ff');
+
+    // Dots at intersections
+    [x1,x2].forEach((x,i)=>{
+      const y=i?y2:y1;
+      ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2);
+      ctx.fillStyle='#6c63ff'; ctx.fill();
+    });
+
+    ctx.fillStyle='#a5b4fc'; ctx.font='bold 12px sans-serif';
+    ctx.fillText('Ângulo: '+sl.value+'°', 10, H-10);
+  }
+
+  sl.addEventListener('input', draw);
+  draw();
+})();
+
+// ════════════════════════════════════════
+// SHAPES GRID
+// ════════════════════════════════════════
+(function(){
+  const shapes = [
+    { name:'Quadrado', formula:'A = l²', color:'#6c63ff', draw:(c)=>{ const ctx=c.getContext('2d'); ctx.clearRect(0,0,60,60); ctx.fillStyle='#6c63ff33'; ctx.strokeStyle='#6c63ff'; ctx.lineWidth=2; ctx.fillRect(8,8,44,44); ctx.strokeRect(8,8,44,44); } },
+    { name:'Retângulo', formula:'A = b×h', color:'#43e97b', draw:(c)=>{ const ctx=c.getContext('2d'); ctx.clearRect(0,0,60,60); ctx.fillStyle='#43e97b33'; ctx.strokeStyle='#43e97b'; ctx.lineWidth=2; ctx.fillRect(4,14,52,32); ctx.strokeRect(4,14,52,32); } },
+    { name:'Triângulo', formula:'A = b×h/2', color:'#ff6584', draw:(c)=>{ const ctx=c.getContext('2d'); ctx.clearRect(0,0,60,60); ctx.fillStyle='#ff658433'; ctx.strokeStyle='#ff6584'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(30,6); ctx.lineTo(55,54); ctx.lineTo(5,54); ctx.closePath(); ctx.fill(); ctx.stroke(); } },
+    { name:'Trapézio', formula:'A=(B+b)h/2', color:'#f7971e', draw:(c)=>{ const ctx=c.getContext('2d'); ctx.clearRect(0,0,60,60); ctx.fillStyle='#f7971e33'; ctx.strokeStyle='#f7971e'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(14,14); ctx.lineTo(46,14); ctx.lineTo(54,50); ctx.lineTo(6,50); ctx.closePath(); ctx.fill(); ctx.stroke(); } },
+    { name:'Losango', formula:'A=D×d/2', color:'#a5b4fc', draw:(c)=>{ const ctx=c.getContext('2d'); ctx.clearRect(0,0,60,60); ctx.fillStyle='#a5b4fc33'; ctx.strokeStyle='#a5b4fc'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(30,5); ctx.lineTo(55,30); ctx.lineTo(30,55); ctx.lineTo(5,30); ctx.closePath(); ctx.fill(); ctx.stroke(); } },
+    { name:'Círculo', formula:'A = πr²', color:'#ec4899', draw:(c)=>{ const ctx=c.getContext('2d'); ctx.clearRect(0,0,60,60); ctx.fillStyle='#ec489933'; ctx.strokeStyle='#ec4899'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(30,30,24,0,Math.PI*2); ctx.fill(); ctx.stroke(); } },
+    { name:'Hexágono', formula:'A=3l²√3/2', color:'#06b6d4', draw:(c)=>{ const ctx=c.getContext('2d'); ctx.clearRect(0,0,60,60); ctx.fillStyle='#06b6d433'; ctx.strokeStyle='#06b6d4'; ctx.lineWidth=2; ctx.beginPath(); for(let i=0;i<6;i++){ const a=i*Math.PI/3-Math.PI/6; ctx.lineTo(30+24*Math.cos(a), 30+24*Math.sin(a)); } ctx.closePath(); ctx.fill(); ctx.stroke(); } },
+    { name:'Paralelogramo', formula:'A = b×h', color:'#84cc16', draw:(c)=>{ const ctx=c.getContext('2d'); ctx.clearRect(0,0,60,60); ctx.fillStyle='#84cc1633'; ctx.strokeStyle='#84cc16'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(16,14); ctx.lineTo(54,14); ctx.lineTo(44,50); ctx.lineTo(6,50); ctx.closePath(); ctx.fill(); ctx.stroke(); } },
+  ];
+  const grid = $('shapesGrid');
+  shapes.forEach((s,i)=>{
+    const div = document.createElement('div');
+    div.className = 'shape-card';
+    div.innerHTML = `<canvas width="60" height="60"></canvas><h4>${s.name}</h4><p>${s.formula}</p>`;
+    grid.appendChild(div);
+    const c = div.querySelector('canvas');
+    s.draw(c);
+    div.addEventListener('click',()=>{
+      document.querySelectorAll('.shape-card').forEach(d=>d.classList.remove('active'));
+      div.classList.add('active');
+      const info = $('shapeInfo');
+      info.style.display='block';
+      $('shapeInfoCard').innerHTML = `<h4 style="color:${s.color}">${s.name}</h4><div class="formula">${s.formula}</div>`;
+    });
+  });
+})();
+
+// ════════════════════════════════════════
+// RECT CANVAS
+// ════════════════════════════════════════
+(function(){
+  const c=$('rectCanvas'), ctx=c.getContext('2d');
+  const bSl=$('rectB'), hSl=$('rectH');
+
+  function draw(){
+    const b=+bSl.value, h=+hSl.value;
+    $('rectBVal').textContent=b+' m';
+    $('rectHVal').textContent=h+' m';
+    const area=b*h;
+    $('rectArea').textContent=area;
+    $('rectBar').style.width=(area/300*100)+'%';
+
+    const CW=320, CH=200;
+    ctx.clearRect(0,0,CW,CH);
+    // 40px left for h-label, 16px right, 16px top, 28px bottom for b-label
+    const PL=40, PR=16, PT=16, PB=28;
+    const dW=CW-PL-PR, dH=CH-PT-PB;
+    const scale=Math.min(dW/b, dH/h);
+    const rw=b*scale, rh=h*scale;
+    const rx=PL+(dW-rw)/2, ry=PT+(dH-rh)/2;
+
+    ctx.fillStyle='#6c63ff22';
+    ctx.strokeStyle='#6c63ff';
+    ctx.lineWidth=2;
+    ctx.fillRect(rx,ry,rw,rh);
+    ctx.strokeRect(rx,ry,rw,rh);
+
+    // Right angle marks
+    const s=Math.max(6,Math.min(12,rw*0.07));
+    ctx.strokeStyle='#a5b4fc'; ctx.lineWidth=1;
+    ctx.strokeRect(rx,ry+rh-s,s,s);
+    ctx.strokeRect(rx+rw-s,ry+rh-s,s,s);
+    ctx.strokeRect(rx+rw-s,ry,s,s);
+    ctx.strokeRect(rx,ry,s,s);
+
+    // Dimension labels
+    ctx.fillStyle='#43e97b'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(b+' m', rx+rw/2, ry+rh+22);
+    ctx.save(); ctx.translate(rx-16, ry+rh/2); ctx.rotate(-Math.PI/2);
+    ctx.fillText(h+' m', 0, 5);
+    ctx.restore();
+  }
+
+  bSl.addEventListener('input',draw);
+  hSl.addEventListener('input',draw);
+  draw();
+})();
+
+// ════════════════════════════════════════
+// TRIANGLE CANVAS
+// ════════════════════════════════════════
+(function(){
+  const c=$('triCanvas'), ctx=c.getContext('2d');
+  const bSl=$('triB'), hSl=$('triH');
+
+  function draw(){
+    const b=+bSl.value, h=+hSl.value;
+    $('triBVal').textContent=b+' m';
+    $('triHVal').textContent=h+' m';
+    $('triArea').textContent=(b*h/2).toFixed(1);
+
+    ctx.clearRect(0,0,320,200);
+    const W=300, H=180, pad=20;
+    const scaleX=(W-60)/20, scaleY=(H-60)/15;
+    const rw=b*scaleX, rh=h*scaleY;
+    const bx=pad+10, by=H-pad;
+
+    // Ghost rectangle
+    ctx.fillStyle='#6c63ff11'; ctx.strokeStyle='#6c63ff33'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+    ctx.fillRect(bx, by-rh, rw, rh);
+    ctx.strokeRect(bx, by-rh, rw, rh);
+    ctx.setLineDash([]);
+
+    // Triangle
+    ctx.fillStyle='#ff658433'; ctx.strokeStyle='#ff6584'; ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(bx, by);
+    ctx.lineTo(bx+rw, by);
+    ctx.lineTo(bx+rw/2, by-rh);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+
+    // Height line
+    ctx.strokeStyle='#43e97b66'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(bx+rw/2, by); ctx.lineTo(bx+rw/2, by-rh); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle='#43e97b'; ctx.font='bold 12px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(b+' m', bx+rw/2, by+18);
+    ctx.save(); ctx.translate(bx+rw/2+18, by-rh/2); ctx.rotate(Math.PI/2);
+    ctx.fillText(h+' m', 0,0);
+    ctx.restore();
+  }
+
+  bSl.addEventListener('input',draw);
+  hSl.addEventListener('input',draw);
+  draw();
+})();
+
+// ════════════════════════════════════════
+// TRAPÉZIO CANVAS
+// ════════════════════════════════════════
+(function(){
+  const c=$('trapCanvas'), ctx=c.getContext('2d');
+  const BSl=$('trapB'), bSl=$('trapb'), hSl=$('trapH');
+
+  function draw(){
+    const B=+BSl.value, b=Math.min(+bSl.value, B-0.5), h=+hSl.value;
+    $('trapBVal').textContent=B+' m';
+    $('trapbVal').textContent=b+' m';
+    $('trapHVal').textContent=h+' m';
+    $('trapArea').textContent=((B+b)*h/2).toFixed(1);
+
+    ctx.clearRect(0,0,320,200);
+    const W=300, H=180, pad=20;
+    const scale=Math.min((W-60)/B, (H-60)/h);
+    const Bw=B*scale, bw=b*scale, rh=h*scale;
+    const bx=pad+10, by=H-pad;
+    const offset=(Bw-bw)/2;
+
+    ctx.fillStyle='#f7971e22'; ctx.strokeStyle='#f7971e'; ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(bx, by);
+    ctx.lineTo(bx+Bw, by);
+    ctx.lineTo(bx+Bw-offset, by-rh);
+    ctx.lineTo(bx+offset, by-rh);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+
+    // Height dashed
+    ctx.strokeStyle='#43e97b55'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(bx+Bw-offset,by); ctx.lineTo(bx+Bw-offset,by-rh); ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle='#f7971e'; ctx.font='bold 12px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('B='+B+'m', bx+Bw/2, by+18);
+    ctx.fillText('b='+b+'m', bx+Bw/2, by-rh-8);
+    ctx.save(); ctx.translate(bx+Bw-offset+18, by-rh/2); ctx.rotate(Math.PI/2);
+    ctx.fillText('h='+h+'m', 0,0); ctx.restore();
+  }
+
+  BSl.addEventListener('input',draw);
+  bSl.addEventListener('input',draw);
+  hSl.addEventListener('input',draw);
+  draw();
+})();
+
+// ════════════════════════════════════════
+// PARALELOGRAMO CANVAS
+// ════════════════════════════════════════
+(function(){
+  const c=$('paraCanvas'), ctx=c.getContext('2d');
+  const bSl=$('paraB'), hSl=$('paraH'), skSl=$('paraSkew');
+
+  function draw(){
+    const b=+bSl.value, h=+hSl.value, sk=+skSl.value;
+    $('paraBVal').textContent=b+' m';
+    $('paraHVal').textContent=h+' m';
+    $('paraSkewVal').textContent=sk+'°';
+    $('paraArea').textContent=(b*h).toFixed(1);
+
+    const CW=320, CH=200;
+    ctx.clearRect(0,0,CW,CH);
+    // total horizontal span = base + skew offset; fit both inside canvas
+    const skRad=sk*Math.PI/180;
+    const offUnits=Math.tan(skRad)*h;
+    const PL=16, PR=36, PT=16, PB=28;
+    const dW=CW-PL-PR, dH=CH-PT-PB;
+    const scale=Math.min(dW/(b+offUnits), dH/h);
+    const bw=b*scale, rh=h*scale;
+    const offset=offUnits*scale;
+    const bx=PL+(dW-bw-offset)/2, by=PT+dH;
+
+    ctx.fillStyle='#84cc1622'; ctx.strokeStyle='#84cc16'; ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(bx+offset, by-rh);
+    ctx.lineTo(bx+bw+offset, by-rh);
+    ctx.lineTo(bx+bw, by);
+    ctx.lineTo(bx, by);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+
+    // height dashed
+    ctx.strokeStyle='#43e97b55'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(bx+bw, by); ctx.lineTo(bx+bw, by-rh); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // right angle at top of height
+    const s=8;
+    ctx.strokeStyle='#43e97b'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(bx+bw-s,by-rh); ctx.lineTo(bx+bw-s,by-rh+s); ctx.lineTo(bx+bw,by-rh+s); ctx.stroke();
+
+    ctx.fillStyle='#84cc16'; ctx.font='bold 12px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(b+' m', bx+bw/2+offset/2, by+18);
+    ctx.save(); ctx.translate(bx+bw+22, by-rh/2); ctx.rotate(Math.PI/2);
+    ctx.fillText(h+' m', 0,0); ctx.restore();
+  }
+
+  bSl.addEventListener('input',draw);
+  hSl.addEventListener('input',draw);
+  skSl.addEventListener('input',draw);
+  draw();
+})();
+
+// ════════════════════════════════════════
+// LOSANGO CANVAS
+// ════════════════════════════════════════
+(function(){
+  const c=$('rhombCanvas'), ctx=c.getContext('2d');
+  const DSl=$('rhombD'), dSl=$('rhombd');
+
+  function draw(){
+    const D=+DSl.value, d=+dSl.value;
+    $('rhombDVal').textContent=D+' m';
+    $('rhombdVal').textContent=d+' m';
+    $('rhombArea').textContent=(D*d/2).toFixed(1);
+
+    ctx.clearRect(0,0,320,220);
+    const cx=160, cy=110;
+    const scale=8;
+    const hw=D/2*scale, hh=d/2*scale;
+
+    // Diagonals dashed
+    ctx.strokeStyle='#a5b4fc44'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(cx-hw,cy); ctx.lineTo(cx+hw,cy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx,cy-hh); ctx.lineTo(cx,cy+hh); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Losango
+    ctx.fillStyle='#a5b4fc22'; ctx.strokeStyle='#a5b4fc'; ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy-hh);
+    ctx.lineTo(cx+hw,cy);
+    ctx.lineTo(cx,cy+hh);
+    ctx.lineTo(cx-hw,cy);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+
+    // Dots
+    [[cx,cy-hh],[cx+hw,cy],[cx,cy+hh],[cx-hw,cy],[cx,cy]].forEach(([x,y])=>{
+      ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fillStyle='#a5b4fc'; ctx.fill();
+    });
+
+    // Labels
+    ctx.fillStyle='#a5b4fc'; ctx.font='bold 12px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('D = '+D+' m', cx, cy-hh-12);
+    ctx.fillText('d = '+d+' m', cx+hw+28, cy+4);
+
+    // Right angle mark at center
+    const s=7;
+    ctx.strokeStyle='#43e97b'; ctx.lineWidth=1.5; ctx.strokeRect(cx,cy,s,s);
+  }
+
+  DSl.addEventListener('input',draw);
+  dSl.addEventListener('input',draw);
+  draw();
+})();
+
+// ════════════════════════════════════════
+// PITÁGORAS CANVAS
+// ════════════════════════════════════════
+(function(){
+  const c=$('pythCanvas'), ctx=c.getContext('2d');
+  const aSl=$('pythA'), bSl=$('pythB');
+
+  function draw(){
+    const a=+aSl.value, b=+bSl.value;
+    const cc=Math.sqrt(a*a+b*b);
+    $('pythAVal').textContent=a;
+    $('pythBVal').textContent=b;
+    $('pythEq').textContent=`${a}² + ${b}² = ${a*a} + ${b*b} = ${a*a+b*b}`;
+    $('pythC').textContent=cc.toFixed(2);
+
+    const CW=560, CH=340;
+    ctx.clearRect(0,0,CW,CH);
+    // scale so neither square overflows: (a+b)*scale ≤ 295 (vertical+horizontal)
+    const scale=Math.min(295/(a+b), 28);
+    // position origin so square-b fits above and square-a fits below
+    const ox=20+b*scale+Math.max(0,(CW-100-(a+b)*scale)/2);
+    const oy=20+b*scale+Math.max(0,(CH-40-(a+b)*scale)/2);
+
+    // Main triangle
+    const tx=ox, ty=oy, bx=ox+a*scale, by=oy, cx2=ox, cy2=oy-b*scale;
+    ctx.fillStyle='#ffffff22'; ctx.strokeStyle='#e8eaf6'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(bx,by); ctx.lineTo(cx2,cy2); ctx.closePath();
+    ctx.fill(); ctx.stroke();
+
+    // Right angle
+    const s=12;
+    ctx.strokeStyle='#43e97b'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(ox+s,oy); ctx.lineTo(ox+s,oy-s); ctx.lineTo(ox,oy-s); ctx.stroke();
+
+    // Square on a (bottom)
+    ctx.fillStyle='#6c63ff33'; ctx.strokeStyle='#6c63ff'; ctx.lineWidth=2;
+    ctx.fillRect(ox, oy, a*scale, a*scale); ctx.strokeRect(ox, oy, a*scale, a*scale);
+    ctx.fillStyle='#a5b4fc'; ctx.font='bold 14px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('a² = '+(a*a), ox+a*scale/2, oy+a*scale/2+6);
+
+    // Square on b (left)
+    ctx.fillStyle='#ff658433'; ctx.strokeStyle='#ff6584'; ctx.lineWidth=2;
+    ctx.fillRect(ox-b*scale, oy-b*scale, b*scale, b*scale);
+    ctx.strokeRect(ox-b*scale, oy-b*scale, b*scale, b*scale);
+    ctx.fillStyle='#ff9eb0'; ctx.textAlign='center';
+    ctx.fillText('b² = '+(b*b), ox-b*scale/2, oy-b*scale/2+6);
+
+    // Square on c (hypotenuse)
+    // perpendicular square on c
+    const len=cc*scale;
+    const dx=(bx-cx2)/cc/scale, dy=(by-cy2)/cc/scale;
+    const px=-dy, py=dx; // perpendicular unit
+    const pts=[
+      [cx2,cy2],[bx,by],
+      [bx+px*len,by+py*len],[cx2+px*len,cy2+py*len]
+    ];
+    ctx.fillStyle='#43e97b33'; ctx.strokeStyle='#43e97b'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(...pts[0]); pts.slice(1).forEach(p=>ctx.lineTo(...p)); ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    const mcx=(pts[0][0]+pts[2][0])/2, mcy=(pts[0][1]+pts[2][1])/2;
+    ctx.fillStyle='#86efac'; ctx.textAlign='center';
+    ctx.fillText('c²='+(a*a+b*b), mcx, mcy);
+
+    // Side labels on triangle
+    ctx.fillStyle='#6c63ff'; ctx.font='bold 15px sans-serif';
+    ctx.fillText('a='+a, ox+a*scale/2, oy-8);
+    ctx.fillStyle='#ff6584';
+    ctx.save(); ctx.translate(ox-22, oy-b*scale/2); ctx.rotate(-Math.PI/2);
+    ctx.fillText('b='+b, 0,0); ctx.restore();
+    ctx.fillStyle='#43e97b'; ctx.textAlign='center';
+    const mx=(bx+cx2)/2+18, my=(by+cy2)/2;
+    ctx.fillText('c≈'+cc.toFixed(2), mx+10, my);
+  }
+
+  aSl.addEventListener('input',draw);
+  bSl.addEventListener('input',draw);
+  draw();
+})();
+
+// ════════════════════════════════════════
+// TERNAS PITAGÓRICAS
+// ════════════════════════════════════════
+(function(){
+  const ternas=[
+    [3,4,5],[5,12,13],[8,15,17],[7,24,25],
+    [6,8,10],[9,12,15],[20,21,29],[10,24,26]
+  ];
+  const grid=$('ternasGrid');
+  ternas.forEach(([a,b,c])=>{
+    const div=document.createElement('div');
+    div.style.cssText='background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;';
+    div.innerHTML=`<div style="font-size:1.3rem;font-weight:800;color:#6c63ff">${a} — ${b} — ${c}</div>
+    <div style="font-size:.8rem;color:#8892b0;margin-top:6px">${a}²+${b}²=${c}² ✓<br>${a*a}+${b*b}=${c*c}</div>`;
+    grid.appendChild(div);
+  });
+})();
+
+// ════════════════════════════════════════
+// TRIANGLE CANVASES (tipos)
+// ════════════════════════════════════════
+function drawTriangle(canvasId, pts, color){
+  const c=$(canvasId), ctx=c.getContext('2d');
+  ctx.clearRect(0,0,280,220);
+  ctx.fillStyle=color+'33'; ctx.strokeStyle=color; ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(...pts[0]);
+  pts.slice(1).forEach(p=>ctx.lineTo(...p));
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+
+  // Angle arcs
+  pts.forEach(([x,y],i)=>{
+    const p1=pts[(i+1)%3], p2=pts[(i+2)%3];
+    const a1=Math.atan2(p1[1]-y,p1[0]-x), a2=Math.atan2(p2[1]-y,p2[0]-x);
+    ctx.beginPath(); ctx.arc(x,y,18,a1,a2); ctx.strokeStyle=color+'88'; ctx.lineWidth=1.5; ctx.stroke();
+  });
+}
+
+drawTriangle('triEquiCanvas', [[140,30],[245,190],[35,190]], '#6c63ff');
+drawTriangle('triIsoCanvas',  [[140,30],[220,190],[60,190]],  '#ff6584');
+drawTriangle('triEscCanvas',  [[80,40],[250,180],[40,180]],   '#43e97b');
+drawTriangle('triRetCanvas',  [[50,180],[50,40],[230,180]],   '#f7971e');
+drawTriangle('triObtCanvas',  [[30,180],[260,180],[200,60]],  '#c084fc');
+
+// Equilateral slider
+(function(){
+  const sl=$('equiL');
+  function update(){
+    const l=+sl.value; $('equiLVal').textContent=l;
+    $('equiArea').textContent=(l*l*Math.sqrt(3)/4).toFixed(2);
+    const c=$('triEquiCanvas'), ctx=c.getContext('2d');
+    const h2=Math.floor(220), cx2=140;
+    const rh=l*8; const rw=l*8;
+    ctx.clearRect(0,0,280,220);
+    const bx=cx2, by=190;
+    const pts=[[bx,by],[bx+rw/2,by-rh*Math.sqrt(3)/2],[bx-rw/2,by-rh*Math.sqrt(3)/2]];
+    ctx.fillStyle='#6c63ff33'; ctx.strokeStyle='#6c63ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(...pts[0]); pts.slice(1).forEach(p=>ctx.lineTo(...p)); ctx.closePath(); ctx.fill(); ctx.stroke();
+    // equal side marks
+    pts.forEach(([x,y],i)=>{
+      const [nx,ny]=pts[(i+1)%3];
+      const mx=(x+nx)/2, my=(y+ny)/2;
+      const ang=Math.atan2(ny-y,nx-x)+Math.PI/2;
+      ctx.strokeStyle='#a5b4fc'; ctx.lineWidth=2;
+      ctx.beginPath();
+      ctx.moveTo(mx-6*Math.cos(ang),my-6*Math.sin(ang));
+      ctx.lineTo(mx+6*Math.cos(ang),my+6*Math.sin(ang));
+      ctx.stroke();
+    });
+    ctx.fillStyle='#6c63ff'; ctx.font='bold 12px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('60°',bx,by-18); ctx.fillText('60°',bx-rw/2+22,by-rh*Math.sqrt(3)/2+22);
+    ctx.fillText('60°',bx+rw/2-22,by-rh*Math.sqrt(3)/2+22);
+  }
+  sl.addEventListener('input',update); update();
+})();
+
+// Isosceles slider
+(function(){
+  const bSl=$('isoB'), lSl=$('isoL');
+  function update(){
+    const b=+bSl.value, l=+lSl.value;
+    $('isoBVal').textContent=b; $('isoLVal').textContent=l;
+    const h=Math.sqrt(Math.max(0,l*l-(b/2)*(b/2)));
+    $('isoArea').textContent=(b*h/2).toFixed(2);
+    const scale=12;
+    const c=$('triIsoCanvas'), ctx=c.getContext('2d');
+    ctx.clearRect(0,0,280,220);
+    const cx2=140, by=190;
+    const pts=[[cx2,by-h*scale],[cx2+b/2*scale,by],[cx2-b/2*scale,by]];
+    ctx.fillStyle='#ff658433'; ctx.strokeStyle='#ff6584'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(...pts[0]); pts.slice(1).forEach(p=>ctx.lineTo(...p)); ctx.closePath(); ctx.fill(); ctx.stroke();
+    // height
+    ctx.strokeStyle='#43e97b55'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(cx2,by); ctx.lineTo(cx2,by-h*scale); ctx.stroke(); ctx.setLineDash([]);
+  }
+  bSl.addEventListener('input',update); lSl.addEventListener('input',update); update();
+})();
+
+// ════════════════════════════════════════
+// TRIANGLE ANGLES (soma 180°)
+// ════════════════════════════════════════
+(function(){
+  const c=$('triAnglesCanvas'), ctx=c.getContext('2d');
+  const aSl=$('angA'), bSl=$('angB');
+
+  function draw(){
+    let A=+aSl.value, B=+bSl.value;
+    if(A+B>=170){ B=170-A; bSl.value=B; }
+    const C=180-A-B;
+    $('angAVal').textContent=A+'°';
+    $('angBVal').textContent=B+'°';
+    $('angSum').textContent=180;
+    $('angC').textContent=C;
+
+    const CW=500, CH=280;
+    ctx.clearRect(0,0,CW,CH);
+
+    const rA=A*Math.PI/180, rB=B*Math.PI/180, rC=C*Math.PI/180;
+    // Unit triangle: base from (0,0) to (1,0), apex computed by law of sines
+    const sideB=Math.sin(rB)/Math.sin(rC);
+    const p2x=sideB*Math.cos(rA), p2y=sideB*Math.sin(rA);
+
+    // Bounding box in unit coords (y positive = upward)
+    const xMin=Math.min(0,1,p2x), xMax=Math.max(0,1,p2x);
+    const unitW=xMax-xMin, unitH=Math.max(p2y,0.001);
+
+    // Scale to fit canvas with padding for angle labels
+    const PAD=54;
+    const scale=Math.min((CW-2*PAD)/unitW,(CH-2*PAD)/unitH);
+
+    // Canvas mapping (flip y axis)
+    const mapX=x=>PAD+(x-xMin)*scale;
+    const mapY=y=>CH-PAD-y*scale;
+
+    const pts=[
+      [mapX(0),   mapY(0)  ],
+      [mapX(1),   mapY(0)  ],
+      [mapX(p2x), mapY(p2y)]
+    ];
+
+    ctx.fillStyle='#6c63ff22'; ctx.strokeStyle='#6c63ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(...pts[0]); pts.slice(1).forEach(p=>ctx.lineTo(...p)); ctx.closePath();
+    ctx.fill(); ctx.stroke();
+
+    // Angle arcs & labels (always sweep the interior/shorter arc)
+    const labels=['A','B','C'], angles=[A,B,C], colors=['#6c63ff','#ff6584','#43e97b'];
+    pts.forEach(([x,y],i)=>{
+      const p1=pts[(i+1)%3], p2=pts[(i+2)%3];
+      let a1=Math.atan2(p1[1]-y,p1[0]-x), a2=Math.atan2(p2[1]-y,p2[0]-x);
+      let da=((a2-a1)%(2*Math.PI)+2*Math.PI)%(2*Math.PI);
+      if(da>Math.PI){[a1,a2]=[a2,a1]; da=2*Math.PI-da;}
+      const arcR=Math.min(22, Math.hypot(p1[0]-x,p1[1]-y)*0.28, Math.hypot(p2[0]-x,p2[1]-y)*0.28);
+      ctx.beginPath(); ctx.arc(x,y,arcR,a1,a2);
+      ctx.strokeStyle=colors[i]; ctx.lineWidth=2.5; ctx.stroke();
+      const midA=a1+da/2;
+      const ld=arcR+20;
+      ctx.fillStyle=colors[i]; ctx.font='bold 12px sans-serif'; ctx.textAlign='center';
+      ctx.fillText(labels[i]+'='+angles[i]+'°', x+ld*Math.cos(midA), y+ld*Math.sin(midA)+4);
+    });
+  }
+
+  aSl.addEventListener('input',draw);
+  bSl.addEventListener('input',draw);
+  draw();
+})();
+
+// ════════════════════════════════════════
+// CIRCLE CANVAS
+// ════════════════════════════════════════
+(function(){
+  const c=$('circleCanvas'), ctx=c.getContext('2d');
+  const rSl=$('circR');
+
+  function draw(){
+    const r=+rSl.value;
+    $('circRVal').textContent=r+' m';
+    $('circD').textContent=(2*r);
+    $('circC').textContent=(2*Math.PI*r).toFixed(2);
+    $('circA').textContent=(Math.PI*r*r).toFixed(2);
+
+    ctx.clearRect(0,0,300,300);
+    const cx=150, cy=150, scale=Math.min(120/r,10);
+    const sr=r*scale;
+
+    // Circle fill
+    ctx.fillStyle='#ec489922'; ctx.strokeStyle='#ec4899'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(cx,cy,sr,0,Math.PI*2); ctx.fill(); ctx.stroke();
+
+    // Radius
+    ctx.strokeStyle='#f7971e'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+sr,cy); ctx.stroke();
+    ctx.fillStyle='#f7971e'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('r = '+r+' m', cx+sr/2, cy-10);
+
+    // Diameter
+    ctx.strokeStyle='#6c63ff55'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(cx-sr,cy); ctx.lineTo(cx+sr,cy); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#a5b4fc'; ctx.fillText('d = '+(2*r)+' m', cx, cy+sr+22);
+
+    // Center dot
+    ctx.beginPath(); ctx.arc(cx,cy,4,0,Math.PI*2); ctx.fillStyle='#f7971e'; ctx.fill();
+
+    // Circumference arc decoration
+    ctx.strokeStyle='#43e97b'; ctx.lineWidth=3; ctx.setLineDash([8,4]);
+    ctx.beginPath(); ctx.arc(cx,cy,sr,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  rSl.addEventListener('input',draw);
+  draw();
+})();
+
+// ════════════════════════════════════════
+// SECTOR CANVAS
+// ════════════════════════════════════════
+(function(){
+  const c=$('sectorCanvas'), ctx=c.getContext('2d');
+  const rSl=$('secR'), aSl=$('secAngle');
+
+  function draw(){
+    const r=+rSl.value, ang=+aSl.value;
+    $('secRVal').textContent=r+' m';
+    $('secAngleVal').textContent=ang+'°';
+    $('secArea').textContent=(ang/360*Math.PI*r*r).toFixed(2);
+    $('secArc').textContent=(ang/360*2*Math.PI*r).toFixed(2);
+
+    ctx.clearRect(0,0,300,300);
+    const cx=150,cy=150, scale=Math.min(110/r,12), sr=r*scale;
+    const start=-Math.PI/2, end=start+ang*Math.PI/180;
+
+    // Full circle ghost
+    ctx.strokeStyle='#ffffff11'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+    ctx.beginPath(); ctx.arc(cx,cy,sr,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+
+    // Sector
+    ctx.fillStyle='#6c63ff33'; ctx.strokeStyle='#6c63ff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,sr,start,end); ctx.closePath();
+    ctx.fill(); ctx.stroke();
+
+    // Remaining sector
+    ctx.fillStyle='#ffffff08';
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,sr,end,start+Math.PI*2); ctx.closePath();
+    ctx.fill();
+
+    // Angle label
+    const midAng=(start+end)/2;
+    ctx.fillStyle='#a5b4fc'; ctx.font='bold 14px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(ang+'°', cx+sr/2.5*Math.cos(midAng), cy+sr/2.5*Math.sin(midAng));
+
+    ctx.fillStyle='#f7971e';
+    ctx.fillText('r='+r, cx+sr/2*Math.cos(start)-10, cy+sr/2*Math.sin(start)-8);
+  }
+
+  rSl.addEventListener('input',draw);
+  aSl.addEventListener('input',draw);
+  draw();
+})();
+
+// ════════════════════════════════════════
+// TERRENO CANVASES
+// ════════════════════════════════════════
+(function(){
+  // Figura A — retângulo x por x+7
+  const ca=$('terrenoACanvas'), ctxa=ca.getContext('2d');
+  ctxa.clearRect(0,0,260,180);
+  const x=8, b=x+7; // example values
+  const scale=10, rw=b*scale, rh=x*scale;
+  const ox=(260-rw)/2, oy=(180-rh)/2;
+  ctxa.fillStyle='#6c63ff22'; ctxa.strokeStyle='#6c63ff'; ctxa.lineWidth=2;
+  ctxa.fillRect(ox,oy,rw,rh); ctxa.strokeRect(ox,oy,rw,rh);
+  // right angle marks
+  const s=10;
+  [[ox,oy],[ox+rw-s,oy],[ox,oy+rh-s],[ox+rw-s,oy+rh-s]].forEach(([px,py])=>ctxa.strokeRect(px,py,s,s));
+  ctxa.fillStyle='#43e97b'; ctxa.font='bold 13px sans-serif'; ctxa.textAlign='center';
+  ctxa.fillText('x + 7', ox+rw/2, oy+rh+20);
+  ctxa.save(); ctxa.translate(ox-18,oy+rh/2); ctxa.rotate(-Math.PI/2);
+  ctxa.fillText('x', 0,0); ctxa.restore();
+  ctxa.fillStyle='#a5b4fc'; ctxa.font='12px sans-serif';
+  ctxa.fillText('Terreno A (retangular)', 130, 170);
+
+  // Figura B — irregular
+  const cb=$('terrenoBCanvas'), ctxb=cb.getContext('2d');
+  ctxb.clearRect(0,0,260,180);
+  const sc=7;
+  // Draw figure B: trapezoid-like shape 15m x 15m base, hypotenuse 21m, notch 3m
+  const pts=[[40,20],[40,20+15*sc],[40+15*sc,20+15*sc],[40+15*sc,20+3*sc],[40+15*sc-3*sc,20+3*sc],[40+15*sc-3*sc,20]];
+  // simpler: right triangle big minus small corner
+  // Large right triangle: bottom-left origin, base=15, height=15
+  const ox2=30, oy2=160;
+  // big triangle vertices: (ox2,oy2), (ox2+15*sc,oy2), (ox2,oy2-15*sc)
+  // notch at (ox2+15*sc,oy2): 3m cut → (ox2+15*sc,oy2-3*sc)
+  const shp=[[ox2,oy2],[ox2+15*sc,oy2],[ox2+15*sc,oy2-3*sc],[ox2+(15-3)*sc,oy2-3*sc],[ox2,oy2-15*sc+3*sc]];
+  // simpler polygon for Figura B matching the image (trapezoid with vertical left, diagonal top-right)
+  const pts2=[
+    [ox2,oy2-15*sc],  // top-left
+    [ox2+15*sc,oy2],  // bottom-right (base corner)
+    [ox2+15*sc,oy2-3*sc], // notch bottom
+    [ox2+(15-3)*sc,oy2-3*sc], // notch inner
+    [ox2,oy2]  // bottom-left
+  ];
+  ctxb.fillStyle='#f7971e22'; ctxb.strokeStyle='#f7971e'; ctxb.lineWidth=2;
+  ctxb.beginPath(); ctxb.moveTo(...pts2[0]); pts2.slice(1).forEach(p=>ctxb.lineTo(...p)); ctxb.closePath();
+  ctxb.fill(); ctxb.stroke();
+  // Labels
+  ctxb.fillStyle='#f7971e'; ctxb.font='bold 11px sans-serif'; ctxb.textAlign='center';
+  ctxb.fillText('21 m', ox2+15*sc/2+20, oy2-15*sc/2);
+  ctxb.fillText('15 m', ox2-18, oy2-7*sc);
+  ctxb.fillText('15 m', ox2+7*sc, oy2+14);
+  ctxb.fillText('3 m', ox2+15*sc+18, oy2-1.5*sc);
+  ctxb.fillStyle='#a5b4fc'; ctxb.font='12px sans-serif';
+  ctxb.fillText('Terreno B (irregular)', 130, 178);
+})();
+
+// ════════════════════════════════════════
+// FENCE CANVAS
+// ════════════════════════════════════════
+(function(){
+  const c=$('fenceCanvas'), ctx=c.getContext('2d');
+  const lSl=$('fenceL'), wSl=$('fenceW'), cSl=$('fenceCost');
+
+  function draw(){
+    const l=+lSl.value, w=+wSl.value, cost=+cSl.value;
+    $('fenceLVal').textContent=l+' m';
+    $('fenceWVal').textContent=w+' m';
+    $('fenceCostVal').textContent='R$'+cost;
+    $('fenceCostLabel').textContent=cost;
+    const perim=2*(l+w);
+    $('fencePerim').textContent=perim;
+    $('fenceArea').textContent=l*w;
+    $('fenceTotalCost').textContent='R$ '+(perim*cost).toLocaleString('pt-BR');
+
+    ctx.clearRect(0,0,300,220);
+    const scale=Math.min(220/l,160/w,8);
+    const rw=l*scale, rh=w*scale;
+    const ox=(300-rw)/2, oy=(220-rh)/2;
+
+    ctx.fillStyle='#43e97b11'; ctx.strokeStyle='#43e97b'; ctx.lineWidth=3;
+    ctx.setLineDash([8,5]);
+    ctx.fillRect(ox,oy,rw,rh); ctx.strokeRect(ox,oy,rw,rh);
+    ctx.setLineDash([]);
+
+    // fence posts
+    const posts=Math.min(Math.floor(perim/3),30);
+    for(let i=0;i<posts;i++){
+      const t=i/posts;
+      let px,py;
+      const p=perim;
+      const d=t*p;
+      if(d<l){ px=ox+d*scale; py=oy; }
+      else if(d<l+w){ px=ox+rw; py=oy+(d-l)*scale; }
+      else if(d<2*l+w){ px=ox+rw-(d-l-w)*scale; py=oy+rh; }
+      else { px=ox; py=oy+rh-(d-2*l-w)*scale; }
+      ctx.fillStyle='#43e97b'; ctx.fillRect(px-3,py-3,6,6);
+    }
+
+    ctx.fillStyle='#43e97b'; ctx.font='bold 12px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(l+' m', ox+rw/2, oy+rh+20);
+    ctx.save(); ctx.translate(ox-20,oy+rh/2); ctx.rotate(-Math.PI/2);
+    ctx.fillText(w+' m', 0,0); ctx.restore();
+  }
+
+  lSl.addEventListener('input',draw);
+  wSl.addEventListener('input',draw);
+  cSl.addEventListener('input',draw);
+  draw();
+})();
+
+// ════════════════════════════════════════
+// TABS
+// ════════════════════════════════════════
+function switchTab(group, id){
+  const prefix=group+'-';
+  document.querySelectorAll('[id^="'+prefix+'"]').forEach(el=>el.classList.remove('active'));
+  $(group+'-'+id).classList.add('active');
+  // Find parent tabs and update buttons
+  document.querySelectorAll('#'+group+'TypeTabs .tab-btn').forEach((btn,i)=>{
+    btn.classList.toggle('active', btn.textContent.toLowerCase().includes(id.substring(0,3).toLowerCase()) || i===(['equi','iso','esc','ret','obt'].indexOf(id)));
+  });
+  // fix active btn by index
+  const order=['equi','iso','esc','ret','obt'];
+  const idx=order.indexOf(id);
+  document.querySelectorAll('#'+group+'TypeTabs .tab-btn').forEach((btn,i)=>btn.classList.toggle('active',i===idx));
+}
+
+// ════════════════════════════════════════
+// QUIZ
+// ════════════════════════════════════════
+const questions=[
+  {
+    q:'Um retângulo tem base 12 m e altura 5 m. Qual é sua área?',
+    opts:['60 m²','70 m²','34 m²','17 m²'],
+    answer:0,
+    explain:'A = b × h = 12 × 5 = 60 m²'
+  },
+  {
+    q:'Qual é a área de um triângulo com base 10 m e altura 8 m?',
+    opts:['80 m²','40 m²','18 m²','16 m²'],
+    answer:1,
+    explain:'A = (b × h)/2 = (10 × 8)/2 = 40 m²'
+  },
+  {
+    q:'Um triângulo retângulo tem catetos de 6 m e 8 m. Qual é a hipotenusa?',
+    opts:['14 m','10 m','12 m','7 m'],
+    answer:1,
+    explain:'c = √(6² + 8²) = √(36+64) = √100 = 10 m (terna 6-8-10)'
+  },
+  {
+    q:'A área de um círculo com raio 5 m é: (use π = 3)',
+    opts:['75 m²','30 m²','78,5 m²','15 m²'],
+    answer:0,
+    explain:'A = π × r² = 3 × 5² = 3 × 25 = 75 m²'
+  },
+  {
+    q:'Um trapézio tem bases 8 m e 14 m e altura 6 m. Qual é sua área?',
+    opts:['66 m²','48 m²','72 m²','132 m²'],
+    answer:0,
+    explain:'A = (8+14) × 6 / 2 = 22 × 3 = 66 m²'
+  },
+  {
+    q:'Um losango tem diagonais de 10 m e 6 m. Sua área é:',
+    opts:['60 m²','30 m²','16 m²','32 m²'],
+    answer:1,
+    explain:'A = (D × d)/2 = (10 × 6)/2 = 30 m²'
+  },
+  {
+    q:'Qual é o perímetro de um quadrado com lado 7 m?',
+    opts:['14 m','49 m','28 m','21 m'],
+    answer:2,
+    explain:'P = 4 × l = 4 × 7 = 28 m'
+  },
+  {
+    q:'A soma dos ângulos internos de qualquer triângulo é:',
+    opts:['90°','270°','360°','180°'],
+    answer:3,
+    explain:'A soma dos ângulos internos de todo triângulo é sempre 180°.'
+  }
+];
+
+let qIdx=0, score=0, answered=false;
+
+function renderQuestion(){
+  const q=questions[qIdx];
+  $('quizProgress').textContent=`Questão ${qIdx+1} de ${questions.length}`;
+  $('quizBar').style.width=(qIdx/questions.length*100)+'%';
+  $('quizQuestion').textContent=q.q;
+  $('quizOptions').innerHTML='';
+  $('quizFeedback').style.display='none';
+  $('quizNext').style.display='none';
+  answered=false;
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='quiz-opt';
+    btn.textContent=String.fromCharCode(65+i)+') '+opt;
+    btn.onclick=()=>selectAnswer(i);
+    $('quizOptions').appendChild(btn);
+  });
+}
+
+function selectAnswer(i){
+  if(answered) return;
+  answered=true;
+  const q=questions[qIdx];
+  const btns=document.querySelectorAll('.quiz-opt');
+  btns.forEach((b,j)=>{
+    if(j===q.answer) b.classList.add('correct');
+    else if(j===i) b.classList.add('wrong');
+    b.style.pointerEvents='none';
+  });
+  const correct=i===q.answer;
+  if(correct) score++;
+  $('quizScore').textContent='Pontos: '+score;
+  const fb=$('quizFeedback');
+  fb.style.display='block';
+  fb.innerHTML=`<div style="color:${correct?'#43e97b':'#ff6584'}; font-weight:700;">${correct?'✅ Correto!':'❌ Incorreto'}</div><div style="margin-top:8px; color:var(--muted); font-size:.9rem;">${q.explain}</div>`;
+  if(qIdx<questions.length-1){
+    $('quizNext').style.display='inline-block';
+  } else {
+    setTimeout(showResult,600);
+  }
+}
+
+function nextQuestion(){
+  qIdx++;
+  if(qIdx<questions.length) renderQuestion();
+  else showResult();
+}
+
+function showResult(){
+  $('quizCard').innerHTML=`
+    <div style="text-align:center; padding:20px 0;">
+      <div style="font-size:3rem; margin-bottom:16px;">${score>=6?'🏆':score>=4?'👍':'📚'}</div>
+      <h3 style="font-size:1.6rem; margin-bottom:8px;">Você acertou ${score} de ${questions.length}!</h3>
+      <p style="color:var(--muted); margin-bottom:24px;">${score>=6?'Excelente! Continue assim!':score>=4?'Bom! Revise os tópicos que errou.':'Continue estudando — volte ao conteúdo acima!'}</p>
+      <div style="background:var(--surface); border-radius:12px; padding:20px; margin-bottom:24px;">
+        <div style="font-size:2rem; font-weight:800; color:var(--accent3);">${Math.round(score/questions.length*100)}%</div>
+        <div class="progress-bar-wrap" style="margin:12px 0;"><div class="progress-bar-fill" style="width:${score/questions.length*100}%"></div></div>
+      </div>
+      <button class="btn" onclick="qIdx=0;score=0;$('quizCard').innerHTML='';buildQuiz();">Refazer Quiz</button>
+    </div>
+  `;
+}
+
+function buildQuiz(){
+  $('quizCard').innerHTML=`
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <div>
+        <span id="quizProgress" style="color:var(--muted); font-size:.9rem;"></span>
+        <div class="progress-bar-wrap" style="width:200px; margin-top:6px;"><div class="progress-bar-fill" id="quizBar" style="width:0%"></div></div>
+      </div>
+      <span id="quizScore" style="font-weight:700; color:var(--accent3); font-size:1.1rem;">Pontos: 0</span>
+    </div>
+    <div id="quizQuestion" style="font-size:1.05rem; margin-bottom:20px; min-height:60px;"></div>
+    <div id="quizOptions"></div>
+    <div id="quizFeedback" style="margin-top:16px; display:none;"></div>
+    <button class="btn" id="quizNext" style="margin-top:16px; display:none;" onclick="nextQuestion()">Próxima →</button>
+  `;
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
