@@ -721,6 +721,37 @@
     to { opacity: 0; }
   }
 
+  /* ── BOTÃO DE ÁUDIO (narração dos módulos) ── */
+  .audio-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: -8px 0 26px;
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: 1.5px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: .9rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background .25s, color .25s, transform .15s;
+  }
+  .audio-btn:hover { background: #ff5fa218; transform: translateY(-1px); }
+  .audio-btn.speaking {
+    background: var(--accent);
+    color: #fff;
+    animation: audioPulse 1.4s ease-in-out infinite;
+  }
+  @keyframes audioPulse {
+    0%, 100% { box-shadow: 0 0 0 0 #ff5fa266; }
+    50%      { box-shadow: 0 0 0 9px #ff5fa200; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .audio-btn.speaking { animation: none; }
+  }
+
   /* ── BALÃO DE FALA DO AVATAR ── */
   .avatar-bubble {
     position: relative;
@@ -783,7 +814,7 @@
 <div class="welcome" id="welcome">
   <canvas id="welcome-hearts"></canvas>
   <div class="welcome-content">
-    <div class="avatar-bubble">Oii! Tem conteúdo novo no Quiz 💗</div>
+    <div class="avatar-bubble">Oii! Agora tem áudio nos módulos e conteúdo novo no Quiz 💗</div>
     <div class="avatar-wrap" aria-hidden="true">
       <svg viewBox="0 0 156 156" xmlns="http://www.w3.org/2000/svg">
         <!-- cabelo (atrás) -->
@@ -3235,6 +3266,113 @@ $('quizNextBtn').onclick=()=>{ if(curIdx<levelList().length-1){ curIdx++; render
 $('quizRedo').onclick=()=>{ levelList().forEach(x=>delete given[x.q.q]); saveQuiz(); curIdx=0; renderQuiz(); };
 
 renderQuiz();
+
+// ════════════════════════════════════════
+// NARRAÇÃO DOS MÓDULOS (Web Speech API)
+// ════════════════════════════════════════
+(function(){
+  if(!('speechSynthesis' in window)) return; // navegador sem suporte: sem botões
+
+  const NARRATIONS = {
+    fundamentos:
+      'Bem-vinda ao primeiro módulo! Aqui a gente conhece as figuras planas: quadrado, retângulo, triângulo, trapézio, losango, círculo e companhia. '+
+      'Clica em cada forma pra ver as propriedades e a fórmula da área. '+
+      'Depois, olha com carinho a parte de ângulos: retas paralelas cortadas por uma transversal criam ângulos correspondentes e alternos internos, que são iguais, '+
+      'e os co-internos, que somam cento e oitenta graus. '+
+      'E não esquece dos ângulos que sempre caem: opostos pelo vértice são iguais, complementares somam noventa graus, e suplementares somam cento e oitenta.',
+    areas:
+      'Esse módulo é o coração da geometria plana no ENEM: calcular áreas. '+
+      'Área de retângulo é base vezes altura. Triângulo é base vezes altura dividido por dois. '+
+      'Trapézio é a soma das bases, vezes a altura, dividido por dois. Losango é diagonal maior vezes diagonal menor, dividido por dois. '+
+      'Brinca com os sliders pra ver como a área muda quando você mexe nas medidas. '+
+      'Uma dica: o ENEM adora dar a área e pedir uma das medidas, então treina fazer a conta ao contrário também!',
+    pitagoras:
+      'O Teorema de Pitágoras é o queridinho da prova! Ele só vale pra triângulo retângulo, aquele que tem um ângulo de noventa graus. '+
+      'A regra é: o quadrado da hipotenusa é igual à soma dos quadrados dos catetos. A hipotenusa é sempre o lado maior, em frente ao ângulo reto. '+
+      'Decora as ternas pitagóricas: três, quatro e cinco. Cinco, doze e treze. E os múltiplos delas, como seis, oito e dez. '+
+      'Reconhecer uma terna na prova economiza um tempão de conta!',
+    triangulos:
+      'Triângulos aparecem em quase toda questão de geometria. '+
+      'O equilátero tem três lados iguais e três ângulos de sessenta graus. O isósceles tem dois lados iguais e os ângulos da base iguais. '+
+      'O escaleno tem tudo diferente. E o retângulo tem um ângulo de noventa graus, onde vale Pitágoras. '+
+      'O mais importante: a soma dos ângulos internos de qualquer triângulo é sempre cento e oitenta graus. Sempre! '+
+      'Se a questão der dois ângulos, o terceiro sai de graça.',
+    circulos:
+      'Círculos! Duas fórmulas resolvem quase tudo: o comprimento da circunferência é dois pi erre, e a área é pi erre ao quadrado. '+
+      'Cuidado pra não confundir raio com diâmetro: o diâmetro é o dobro do raio. '+
+      'O setor circular é a fatia de pizza: a área é proporcional ao ângulo central. '+
+      'E tem a relação dos ângulos: o ângulo inscrito mede a metade do ângulo central que enxerga o mesmo arco. '+
+      'Se o ângulo inscrito enxerga o diâmetro, ele mede noventa graus!',
+    poligonos:
+      'Três assuntos rápidos que caem toda edição. '+
+      'Primeiro, polígonos regulares: a soma dos ângulos internos é ene menos dois, vezes cento e oitenta graus. E o número de diagonais é ene vezes ene menos três, dividido por dois. '+
+      'Segundo, o Teorema de Tales: paralelas cortadas por transversais criam segmentos proporcionais. É a famosa questão do poste e da sombra. '+
+      'Terceiro, semelhança: se os lados aumentam numa razão cá, as áreas aumentam cá ao quadrado. Não esquece de elevar ao quadrado, essa é a pegadinha favorita da prova!',
+    problemas:
+      'Chegou a hora de praticar do jeito que a prova cobra: problemas com contexto real. '+
+      'A receita pra resolver é sempre a mesma: primeiro, desenha ou identifica a figura. Segundo, anota o que o enunciado deu e o que ele pediu. '+
+      'Terceiro, escolhe a fórmula certa e resolve com calma. '+
+      'Presta atenção nas unidades: se tem centímetro e metro misturados, converte tudo antes de calcular. '+
+      'E nas questões de escala, lembra: comprimento escala por cá, área escala por cá ao quadrado.',
+    quiz:
+      'Agora é com você! São trinta e seis questões no estilo ENEM, divididas em três níveis: fácil, médio e difícil. '+
+      'Começa pelo fácil pra pegar confiança, e vai subindo. '+
+      'Pode navegar entre as questões à vontade, e se errar, lê a explicação com calma: é errando no treino que se acerta na prova. '+
+      'Suas respostas ficam salvas, e dá pra refazer cada nível quantas vezes quiser. Boa sorte, você consegue!',
+    resumo:
+      'Esse é o resumão pra bater o olho antes da prova. Todas as fórmulas do site em um lugar só. '+
+      'Minha sugestão: tenta lembrar cada fórmula antes de olhar o cartão, pra testar a memória. '+
+      'E leva as dicas de ouro no coração: converte as unidades antes de calcular, desenha a figura do enunciado, '+
+      'decora as ternas pitagóricas, e lembra que área escala pelo quadrado da razão. '+
+      'Você está pronta. Vai dar tudo certo, bons estudos!'
+  };
+
+  let voice=null;
+  function pickVoice(){
+    const vs=speechSynthesis.getVoices();
+    voice = vs.find(v=>v.lang==='pt-BR') || vs.find(v=>v.lang && v.lang.replace('_','-').toLowerCase().startsWith('pt')) || null;
+  }
+  pickVoice();
+  speechSynthesis.addEventListener('voiceschanged', pickVoice);
+
+  let curBtn=null;
+  function stop(){
+    speechSynthesis.cancel();
+    if(curBtn){
+      curBtn.classList.remove('speaking');
+      curBtn.querySelector('span').textContent='Ouvir explicação';
+      curBtn=null;
+    }
+  }
+
+  Object.keys(NARRATIONS).forEach(id=>{
+    const sec=document.getElementById(id);
+    if(!sec) return;
+    const anchor=sec.querySelector('.section-intro') || sec.querySelector('h2');
+    if(!anchor) return;
+    const b=document.createElement('button');
+    b.className='audio-btn';
+    b.setAttribute('aria-label','Ouvir explicação deste módulo');
+    b.innerHTML='🔊 <span>Ouvir explicação</span>';
+    b.onclick=()=>{
+      if(curBtn===b){ stop(); return; } // clicou de novo: para
+      stop();
+      const u=new SpeechSynthesisUtterance(NARRATIONS[id]);
+      u.lang='pt-BR';
+      if(voice) u.voice=voice;
+      u.rate=1;
+      u.onend=()=>{ if(curBtn===b) stop(); };
+      u.onerror=()=>{ if(curBtn===b) stop(); };
+      curBtn=b;
+      b.classList.add('speaking');
+      b.querySelector('span').textContent='Parar áudio';
+      speechSynthesis.speak(u);
+    };
+    anchor.insertAdjacentElement('afterend', b);
+  });
+
+  window.addEventListener('beforeunload', ()=>speechSynthesis.cancel());
+})();
 </script>
 </body>
 </html>
