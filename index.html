@@ -54,7 +54,7 @@
   #hero-canvas {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
-    opacity: 0.18;
+    opacity: 0.32;
     pointer-events: none;
   }
 
@@ -514,6 +514,23 @@
   .shape-card h4 { font-size: .95rem; font-weight: 700; }
   .shape-card p { font-size: .8rem; color: var(--muted); margin-top: 4px; }
 
+  /* ── RESUMÃO DE FÓRMULAS ── */
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .cheat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    transition: all .2s;
+  }
+  .cheat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .cheat-card h4 { font-size: .95rem; color: var(--accent); margin-bottom: 8px; }
+  .cheat-card .formula { margin: 6px 0; padding: 8px 12px; font-size: .9rem; }
+
   /* ══════════════════════════════════════
      TELA DE BOAS-VINDAS (SPLASH)
   ══════════════════════════════════════ */
@@ -798,6 +815,7 @@
   <a href="#poligonos">Polígonos/Tales</a>
   <a href="#problemas">Problemas</a>
   <a href="#quiz">Quiz</a>
+  <a href="#resumo">Resumão</a>
 </nav>
 
 <!-- ════════════════════════════════════════
@@ -818,6 +836,7 @@
     <a href="#poligonos">Polígonos, Tales e Semelhança</a>
     <a href="#problemas">Problemas ENEM</a>
     <a href="#quiz">Quiz Rápido</a>
+    <a href="#resumo">Resumão de Fórmulas</a>
   </div>
 </div>
 
@@ -1486,6 +1505,21 @@
     </div>
   </div>
 
+  <!-- PROBLEMA 4: escala -->
+  <div class="enem-box reveal">
+    <div class="enem-tag">Escala — clássico do ENEM</div>
+    <p>Na planta de uma casa, feita na escala <b>1:50</b>, a sala é um retângulo de <b>8 cm × 6 cm</b>. Qual é a área real da sala?</p>
+    <button class="btn" onclick="revealAnswer('escalaAns')">Ver resolução</button>
+    <div class="answer-reveal" id="escalaAns">
+      <ul class="steps">
+        <li>Escala 1:50 significa que cada 1 cm da planta vale 50 cm reais. Medidas reais: 8 × 50 = 400 cm = <b>4 m</b> e 6 × 50 = 300 cm = <b>3 m</b>.</li>
+        <li>Área real = 4 × 3 = <b class="hl3">12 m²</b></li>
+        <li>Atalho pela semelhança: comprimentos escalam por k = 50, então <b>áreas escalam por k² = 2500</b>. Área da planta = 48 cm² → 48 × 2500 = 120.000 cm² = 12 m². Mesmo resultado!</li>
+      </ul>
+      <div class="result-box" style="margin-top:12px;">⚠️ Pegadinha clássica: multiplicar a área direto por 50 (daria 2.400 cm², errado). Área escala pelo <strong>quadrado</strong> da escala!</div>
+    </div>
+  </div>
+
 </section>
 
 <div class="divider"></div>
@@ -1519,6 +1553,45 @@
       <button class="btn" id="quizNextBtn">Próxima →</button>
       <button class="btn secondary" id="quizRedo" style="margin-left:auto;">↺ Refazer nível</button>
     </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════
+     9. RESUMÃO DE FÓRMULAS
+═════════════════════════════════════════ -->
+<section id="resumo">
+  <div class="section-label">Módulo 9</div>
+  <h2>Resumão de Fórmulas</h2>
+  <p class="section-intro">A "cola" oficial da revisão: todas as fórmulas do site em um lugar só, pra bater o olho antes da prova. 💗</p>
+
+  <div class="card reveal">
+    <div class="cheat-grid">
+      <div class="cheat-card"><h4>⬛ Quadrado</h4><div class="formula">A = l²</div><div class="formula">P = 4l</div><div class="formula">d = l√2</div></div>
+      <div class="cheat-card"><h4>📐 Retângulo</h4><div class="formula">A = b × h</div><div class="formula">P = 2(b + h)</div><div class="formula">d = √(b² + h²)</div></div>
+      <div class="cheat-card"><h4>🔺 Triângulo</h4><div class="formula">A = (b × h) / 2</div><div class="formula">Soma dos ângulos = 180°</div></div>
+      <div class="cheat-card"><h4>🔻 Triângulo Equilátero</h4><div class="formula">A = l²√3 / 4</div><div class="formula">h = l√3 / 2</div></div>
+      <div class="cheat-card"><h4>🔷 Trapézio</h4><div class="formula">A = (B + b) × h / 2</div></div>
+      <div class="cheat-card"><h4>▱ Paralelogramo</h4><div class="formula">A = b × h</div></div>
+      <div class="cheat-card"><h4>💠 Losango</h4><div class="formula">A = (D × d) / 2</div><div class="formula">Diagonais ⟂ e se cortam ao meio</div></div>
+      <div class="cheat-card"><h4>⭕ Círculo</h4><div class="formula">A = πr²</div><div class="formula">C = 2πr</div></div>
+      <div class="cheat-card"><h4>🍕 Setor Circular</h4><div class="formula">A = (θ/360) × πr²</div><div class="formula">Arco = (θ/360) × 2πr</div></div>
+      <div class="cheat-card"><h4>📏 Pitágoras</h4><div class="formula">a² + b² = c²</div><div class="formula">Ternas: 3-4-5 • 5-12-13 • 8-15-17</div></div>
+      <div class="cheat-card"><h4>🔶 Polígono Regular</h4><div class="formula">Soma âng. = (n−2) × 180°</div><div class="formula">Diagonais = n(n−3) / 2</div></div>
+      <div class="cheat-card"><h4>🪞 Semelhança e Escala</h4><div class="formula">Comprimentos: razão k</div><div class="formula">Áreas: razão k²</div></div>
+    </div>
+  </div>
+
+  <div class="enem-box reveal">
+    <div class="enem-tag">Dicas de ouro para a prova</div>
+    <ul class="steps" style="margin-top:8px;">
+      <li>O ENEM quase sempre diz qual valor de <b>π</b> usar (3 ou 3,14). Se não disser, use 3,14.</li>
+      <li>Cuidado com <b>unidades</b>: converta tudo pra mesma unidade (cm → m) <em>antes</em> de calcular.</li>
+      <li><b>Desenhe a figura</b> do enunciado — metade da questão se resolve enxergando o triângulo retângulo escondido.</li>
+      <li>Decore as <b>ternas pitagóricas</b> (3-4-5 e seus múltiplos) pra não perder tempo com raiz quadrada.</li>
+      <li>Em escala e semelhança: comprimento escala por <b>k</b>, área escala por <b>k²</b> — pegadinha favorita da prova!</li>
+    </ul>
   </div>
 </section>
 
@@ -1639,7 +1712,7 @@ window.addEventListener('scroll', () => {
 (function(){
   const c = $('hero-canvas');
   const ctx = c.getContext('2d');
-  let W, H, shapes = [];
+  let W, H, shapes = [], particles = [];
 
   function resize(){
     W = c.width = c.offsetWidth;
@@ -1647,7 +1720,7 @@ window.addEventListener('scroll', () => {
   }
 
   const COLORS = ['#ff5fa2','#ff9ec9','#c77dff','#ffb26b','#ffd4e6'];
-  const TYPES = ['rect','circle','tri','diamond','heart'];
+  const TYPES = ['rect','circle','tri','diamond','heart','star'];
 
   function mkShape(){
     return {
@@ -1657,7 +1730,8 @@ window.addEventListener('scroll', () => {
       color: COLORS[Math.random()*COLORS.length|0],
       type: TYPES[Math.random()*TYPES.length|0],
       rot: Math.random()*Math.PI*2,
-      vr: (Math.random()-.5)*.01
+      vr: (Math.random()-.5)*.01,
+      pulse: 1
     };
   }
 
@@ -1665,12 +1739,24 @@ window.addEventListener('scroll', () => {
   for(let i=0;i<22;i++) shapes.push(mkShape());
   window.addEventListener('resize', resize);
 
+  function heartPath(k){
+    ctx.moveTo(0, 5*k);
+    ctx.bezierCurveTo(0,2*k, -1.5*k,-4*k, -6*k,-4*k);
+    ctx.bezierCurveTo(-12*k,-4*k, -12*k,4*k, -6*k,7*k);
+    ctx.bezierCurveTo(-3*k,9*k, 0,11*k, 0,13*k);
+    ctx.bezierCurveTo(0,11*k, 3*k,9*k, 6*k,7*k);
+    ctx.bezierCurveTo(12*k,4*k, 12*k,-4*k, 6*k,-4*k);
+    ctx.bezierCurveTo(1.5*k,-4*k, 0,2*k, 0,5*k);
+    ctx.closePath();
+  }
+
   function draw(){
     ctx.clearRect(0,0,W,H);
     shapes.forEach(s => {
       ctx.save();
       ctx.translate(s.x, s.y);
       ctx.rotate(s.rot);
+      ctx.scale(s.pulse, s.pulse);
       ctx.strokeStyle = s.color;
       ctx.fillStyle = s.color;
       ctx.lineWidth = 1.5;
@@ -1689,17 +1775,18 @@ window.addEventListener('scroll', () => {
         ctx.closePath();
         ctx.stroke();
       } else if(s.type==='heart'){
-        const k = s.r/16;
-        ctx.moveTo(0, 5*k);
-        ctx.bezierCurveTo(0,2*k, -1.5*k,-4*k, -6*k,-4*k);
-        ctx.bezierCurveTo(-12*k,-4*k, -12*k,4*k, -6*k,7*k);
-        ctx.bezierCurveTo(-3*k,9*k, 0,11*k, 0,13*k);
-        ctx.bezierCurveTo(0,11*k, 3*k,9*k, 6*k,7*k);
-        ctx.bezierCurveTo(12*k,4*k, 12*k,-4*k, 6*k,-4*k);
-        ctx.bezierCurveTo(1.5*k,-4*k, 0,2*k, 0,5*k);
-        ctx.closePath();
+        heartPath(s.r/16);
         ctx.globalAlpha = .35;
         ctx.fill();
+      } else if(s.type==='star'){
+        for(let i=0;i<10;i++){
+          const rr = i%2===0 ? s.r : s.r*.45;
+          const a = i*Math.PI/5 - Math.PI/2;
+          if(i===0) ctx.moveTo(rr*Math.cos(a), rr*Math.sin(a));
+          else ctx.lineTo(rr*Math.cos(a), rr*Math.sin(a));
+        }
+        ctx.closePath();
+        ctx.stroke();
       } else {
         ctx.moveTo(0,-s.r);
         ctx.lineTo(s.r*.6,0);
@@ -1709,15 +1796,70 @@ window.addEventListener('scroll', () => {
         ctx.stroke();
       }
       ctx.restore();
+
+      // física: flutua passivo; impulso do clique amortece até a deriva normal
       s.x += s.vx; s.y += s.vy; s.rot += s.vr;
+      const sp = Math.hypot(s.vx, s.vy);
+      if(sp > .5){ s.vx *= .98; s.vy *= .98; }
+      s.pulse += (1 - s.pulse) * .08;
       if(s.x<-80) s.x=W+80;
       if(s.x>W+80) s.x=-80;
       if(s.y<-80) s.y=H+80;
       if(s.y>H+80) s.y=-80;
     });
+
+    // partículas de coração do clique
+    particles = particles.filter(p => p.life > 0);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.vy += .04;
+      p.rot += p.vr; p.life -= .018;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.globalAlpha = Math.max(p.life, 0) * .9;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      heartPath(p.size/16);
+      ctx.fill();
+      ctx.restore();
+    });
+    ctx.globalAlpha = 1;
     requestAnimationFrame(draw);
   }
   draw();
+
+  // clique no hero: formas próximas se transformam e ganham impulso,
+  // e nasce uma chuvinha de corações no ponto do clique
+  $('home').addEventListener('click', function(e){
+    if(e.target.closest('a')) return; // não interfere nos links de navegação
+    const rect = c.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+
+    shapes.forEach(s => {
+      const dx = s.x - mx, dy = s.y - my, d = Math.hypot(dx, dy);
+      if(d < 200){
+        s.type = TYPES[(TYPES.indexOf(s.type)+1) % TYPES.length];
+        s.color = COLORS[Math.random()*COLORS.length|0];
+        s.pulse = 1.7;
+        const f = (200-d)/200 * 3 / (d || 1);
+        s.vx += dx*f; s.vy += dy*f;
+        s.vr = (Math.random()-.5)*.06;
+      }
+    });
+
+    for(let i=0;i<10;i++){
+      const a = Math.random()*Math.PI*2, sp = 1 + Math.random()*2.5;
+      particles.push({
+        x: mx, y: my,
+        vx: Math.cos(a)*sp, vy: Math.sin(a)*sp - 1.2,
+        size: 6 + Math.random()*10,
+        life: 1,
+        rot: Math.random()*Math.PI*2,
+        vr: (Math.random()-.5)*.2,
+        color: COLORS[Math.random()*COLORS.length|0]
+      });
+    }
+  });
 })();
 
 // ════════════════════════════════════════
@@ -2852,7 +2994,14 @@ const LEVELS=[
   {id:3, name:'🔥 Difícil'}
 ];
 let curLevel=1, curIdx=0;
-const given={}; // índice global da questão -> alternativa escolhida
+
+// respostas persistidas no aparelho: texto da questão -> alternativa escolhida
+const QUIZ_STORE='geoDudaQuizV1';
+let given={};
+try{ given=JSON.parse(localStorage.getItem(QUIZ_STORE)||'{}'); }catch(e){ given={}; }
+function saveQuiz(){
+  try{ localStorage.setItem(QUIZ_STORE, JSON.stringify(given)); }catch(e){}
+}
 
 function levelList(){
   return questions.map((q,i)=>({q,i})).filter(x=>x.q.level===curLevel);
@@ -2877,7 +3026,7 @@ function renderQuiz(){
   list.forEach((x,k)=>{
     const b=document.createElement('button');
     b.className='qchip'+(k===curIdx?' current':'');
-    if(given[x.i]!==undefined) b.classList.add(given[x.i]===x.q.answer?'ok':'bad');
+    if(given[x.q.q]!==undefined) b.classList.add(given[x.q.q]===x.q.answer?'ok':'bad');
     b.textContent=k+1;
     b.title='Questão '+(k+1);
     b.onclick=()=>{ curIdx=k; renderQuiz(); };
@@ -2885,8 +3034,8 @@ function renderQuiz(){
   });
 
   const {q,i}=list[curIdx];
-  const done=list.filter(x=>given[x.i]!==undefined).length;
-  const okCount=list.filter(x=>given[x.i]===x.q.answer).length;
+  const done=list.filter(x=>given[x.q.q]!==undefined).length;
+  const okCount=list.filter(x=>given[x.q.q]===x.q.answer).length;
   const levelName=LEVELS.find(l=>l.id===curLevel).name;
 
   $('quizProgress').textContent=`Questão ${curIdx+1} de ${list.length} — Nível ${levelName}`;
@@ -2895,7 +3044,7 @@ function renderQuiz(){
   $('quizQuestion').textContent=q.q;
 
   // alternativas (se já respondida, mostra o resultado gravado e trava)
-  const chosen=given[i];
+  const chosen=given[q.q];
   $('quizOptions').innerHTML='';
   q.opts.forEach((opt,j)=>{
     const btn=document.createElement('button');
@@ -2906,7 +3055,7 @@ function renderQuiz(){
       if(j===q.answer) btn.classList.add('correct');
       else if(j===chosen) btn.classList.add('wrong');
     } else {
-      btn.onclick=()=>{ given[i]=j; renderQuiz(); };
+      btn.onclick=()=>{ given[q.q]=j; saveQuiz(); renderQuiz(); };
     }
     $('quizOptions').appendChild(btn);
   });
@@ -2933,7 +3082,7 @@ function renderQuiz(){
 
 $('quizPrev').onclick=()=>{ if(curIdx>0){ curIdx--; renderQuiz(); } };
 $('quizNextBtn').onclick=()=>{ if(curIdx<levelList().length-1){ curIdx++; renderQuiz(); } };
-$('quizRedo').onclick=()=>{ levelList().forEach(x=>delete given[x.i]); curIdx=0; renderQuiz(); };
+$('quizRedo').onclick=()=>{ levelList().forEach(x=>delete given[x.q.q]); saveQuiz(); curIdx=0; renderQuiz(); };
 
 renderQuiz();
 </script>
