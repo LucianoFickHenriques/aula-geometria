@@ -263,23 +263,24 @@
   }
 
   .steps li {
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
+    position: relative;
+    padding-left: 40px;
+    line-height: 1.65;
   }
 
   .steps li::before {
     counter-increment: step;
     content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 2px;
     background: var(--accent);
     color: #fff;
     border-radius: 50%;
     width: 26px; height: 26px;
-    min-width: 26px;
     display: flex; align-items: center; justify-content: center;
     font-size: .8rem;
     font-weight: 700;
-    margin-top: 2px;
   }
 
   /* ── HIGHLIGHT TEXT ── */
@@ -530,6 +531,9 @@
   .cheat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
   .cheat-card h4 { font-size: .95rem; color: var(--accent); margin-bottom: 8px; }
   .cheat-card .formula { margin: 6px 0; padding: 8px 12px; font-size: .9rem; }
+
+  /* ── DÚVIDAS: desenho centralizado em cima, passos em largura total ── */
+  .duv-flow .canvas-wrap { max-width: 380px; margin: 0 auto 20px; }
 
   /* ══════════════════════════════════════
      TELA DE BOAS-VINDAS (SPLASH)
@@ -1723,7 +1727,7 @@
       <span style="background:#59d6a822; border:1px solid var(--accent3); color:#2fae7d; border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Gabarito: D (mediatriz)</span>
     </div>
     <p style="color:var(--muted); font-style:italic; margin-bottom:16px;">"Duas guaritas em um terreno. Quer-se construir uma estrada reta em que qualquer lugar dela esteja sempre à mesma distância das duas guaritas. Em relação ao segmento que liga as guaritas, a estrada é..."</p>
-    <div class="two-col">
+    <div class="duv-flow">
       <div class="canvas-wrap">
         <canvas id="duvCanvas1" width="320" height="220"></canvas>
         <div class="canvas-label">A mediatriz: perpendicular ao segmento, passando pelo meio</div>
@@ -1749,7 +1753,7 @@
       <span style="background:#59d6a822; border:1px solid var(--accent3); color:#2fae7d; border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Gabarito: A (3 pontos)</span>
     </div>
     <p style="color:var(--muted); font-style:italic; margin-bottom:16px;">"Um aluno precisa localizar o centro de uma moeda circular usando lápis, papel, régua não graduada e compasso. Qual o número mínimo de pontos marcados na circunferência para localizar o centro?"</p>
-    <div class="two-col">
+    <div class="duv-flow">
       <div class="canvas-wrap">
         <canvas id="duvCanvas2" width="320" height="220"></canvas>
         <div class="canvas-label">3 pontos → 2 cordas → 2 mediatrizes → centro!</div>
@@ -1775,7 +1779,7 @@
       <span style="background:#59d6a822; border:1px solid var(--accent3); color:#2fae7d; border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Gabarito: B (40°)</span>
     </div>
     <p style="color:var(--muted); font-style:italic; margin-bottom:16px;">"Um dos ângulos internos de um triângulo isósceles mede 100°. Qual é a medida do ângulo agudo formado pelas bissetrizes dos outros ângulos internos?"</p>
-    <div class="two-col">
+    <div class="duv-flow">
       <div class="canvas-wrap">
         <canvas id="duvCanvas3" width="320" height="230"></canvas>
         <div class="canvas-label">As bissetrizes se cruzam formando 140° (obtuso) e 40° (agudo)</div>
@@ -1801,7 +1805,7 @@
       <span style="background:#59d6a822; border:1px solid var(--accent3); color:#2fae7d; border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Gabarito: B (10,5)</span>
     </div>
     <p style="color:var(--muted); font-style:italic; margin-bottom:16px;">"Dois triângulos equiláteros ABC e A'B'C' têm o mesmo baricentro, com lados paralelos (AB∥A'B', AC∥A'C', BC∥B'C'). O lado de ABC mede 3√3 e a distância entre os lados paralelos mede 2 cm. Qual é a altura de A'B'C'?"</p>
-    <div class="two-col">
+    <div class="duv-flow">
       <div class="canvas-wrap">
         <canvas id="duvCanvas4" width="320" height="250"></canvas>
         <div class="canvas-label">Segredo: trabalhar com a distância baricentro→lado (h/3)</div>
