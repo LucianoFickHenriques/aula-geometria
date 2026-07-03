@@ -884,6 +884,7 @@
   <a href="#problemas">Problemas</a>
   <a href="#quiz">Quiz</a>
   <a href="#resumo">Resumão</a>
+  <a href="#duvidas">Dúvidas</a>
 </nav>
 
 <!-- ════════════════════════════════════════
@@ -905,6 +906,7 @@
     <a href="#problemas">Problemas ENEM</a>
     <a href="#quiz">Quiz Rápido</a>
     <a href="#resumo">Resumão de Fórmulas</a>
+    <a href="#duvidas">Dúvidas Explicadas</a>
   </div>
 </div>
 
@@ -1699,6 +1701,121 @@
       <li>Decore as <b>ternas pitagóricas</b> (3-4-5 e seus múltiplos) pra não perder tempo com raiz quadrada.</li>
       <li>Em escala e semelhança: comprimento escala por <b>k</b>, área escala por <b>k²</b> — pegadinha favorita da prova!</li>
     </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════════════════════
+     10. DÚVIDAS EXPLICADAS
+═════════════════════════════════════════ -->
+<section id="duvidas">
+  <div class="section-label">Módulo 10</div>
+  <h2>Dúvidas Explicadas 💬</h2>
+  <p class="section-intro">Aquelas questões do caderno de cevianas e pontos notáveis que ficaram engasgadas — explicadas passo a passo, do jeitinho que elas merecem. Errar faz parte: é assim que a gente aprende de verdade! 💗</p>
+
+  <!-- DÚVIDA 1: guaritas / mediatriz -->
+  <div class="card reveal">
+    <h3>1️⃣ A estrada e as duas guaritas</h3>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+      <span style="background:var(--surface); border:1px solid var(--border); color:var(--muted); border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Fixação — Questão 2</span>
+      <span style="background:#ff5fa218; border:1px solid var(--accent2); color:var(--accent2); border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Você marcou: A (bissetriz)</span>
+      <span style="background:#59d6a822; border:1px solid var(--accent3); color:#2fae7d; border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Gabarito: D (mediatriz)</span>
+    </div>
+    <p style="color:var(--muted); font-style:italic; margin-bottom:16px;">"Duas guaritas em um terreno. Quer-se construir uma estrada reta em que qualquer lugar dela esteja sempre à mesma distância das duas guaritas. Em relação ao segmento que liga as guaritas, a estrada é..."</p>
+    <div class="two-col">
+      <div class="canvas-wrap">
+        <canvas id="duvCanvas1" width="320" height="220"></canvas>
+        <div class="canvas-label">A mediatriz: perpendicular ao segmento, passando pelo meio</div>
+      </div>
+      <div>
+        <ul class="steps">
+          <li>Leia com atenção <b>o que é dado</b>: duas guaritas = dois <b class="hl">PONTOS</b> (não são retas!).</li>
+          <li>Quem é o conjunto de todos os pontos que ficam à mesma distância de <b>dois pontos</b>? A <b class="hl3">mediatriz</b> do segmento que os liga: a reta <b>perpendicular</b> que passa pelo <b>ponto médio</b>.</li>
+          <li>A <b class="hl2">bissetriz</b> seria a resposta se a pergunta fosse sobre mesma distância de duas <b>RETAS</b> (os lados de um ângulo) — mas aqui não existe ângulo nenhum, só dois pontos.</li>
+          <li>Em relação ao segmento que liga as guaritas → a estrada é a <b>mediatriz</b> dele. Letra <b class="hl3">D</b> ✓</li>
+        </ul>
+      </div>
+    </div>
+    <div class="result-box" style="margin-top:16px;">💡 <b>Regra de bolso:</b> mesma distância de dois <strong>PONTOS</strong> → <strong>MEDIATRIZ</strong>. Mesma distância de duas <strong>RETAS</strong> (lados de um ângulo) → <strong>BISSETRIZ</strong>. Foi só uma troca de conceitos — agora nunca mais! 😉</div>
+  </div>
+
+  <!-- DÚVIDA 2: moeda Unesp / 3 pontos -->
+  <div class="card reveal">
+    <h3>2️⃣ O centro da moeda (Unesp 2013)</h3>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+      <span style="background:var(--surface); border:1px solid var(--border); color:var(--muted); border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Vestibulares — Questão 1</span>
+      <span style="background:#ff5fa218; border:1px solid var(--accent2); color:var(--accent2); border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Você marcou: E (5 pontos)</span>
+      <span style="background:#59d6a822; border:1px solid var(--accent3); color:#2fae7d; border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Gabarito: A (3 pontos)</span>
+    </div>
+    <p style="color:var(--muted); font-style:italic; margin-bottom:16px;">"Um aluno precisa localizar o centro de uma moeda circular usando lápis, papel, régua não graduada e compasso. Qual o número mínimo de pontos marcados na circunferência para localizar o centro?"</p>
+    <div class="two-col">
+      <div class="canvas-wrap">
+        <canvas id="duvCanvas2" width="320" height="220"></canvas>
+        <div class="canvas-label">3 pontos → 2 cordas → 2 mediatrizes → centro!</div>
+      </div>
+      <div>
+        <ul class="steps">
+          <li>Marque <b>2 pontos</b> na borda e ligue: isso é uma <b class="hl">corda</b>. A mediatriz de qualquer corda <b>passa pelo centro</b>… mas ela é uma reta inteira — o centro está em algum lugar dela, e você ainda não sabe onde!</li>
+          <li>Marque um <b>3º ponto</b>: agora dá pra formar uma <b>segunda corda</b> e traçar a segunda mediatriz.</li>
+          <li>Onde as duas mediatrizes se cruzam? <b class="hl3">No centro da moeda!</b> É exatamente o <b>circuncentro</b> do triângulo formado pelos 3 pontos.</li>
+          <li>Mínimo = <b>3 pontos</b>. Letra <b class="hl3">A</b> ✓ (5 pontos funcionam, mas a pergunta pede o <em>mínimo</em>!)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="result-box" style="margin-top:16px;">💡 <b>Regra de bolso:</b> o centro do círculo que passa por 3 pontos é o <strong>circuncentro</strong> — encontro das mediatrizes. Por isso 3 pontos bastam para "achar" qualquer centro escondido.</div>
+  </div>
+
+  <!-- DÚVIDA 3: UFES isósceles 100° -->
+  <div class="card reveal">
+    <h3>3️⃣ As bissetrizes do triângulo isósceles (UFES)</h3>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+      <span style="background:var(--surface); border:1px solid var(--border); color:var(--muted); border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Vestibulares — Questão 5</span>
+      <span style="background:#ff5fa218; border:1px solid var(--accent2); color:var(--accent2); border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Você marcou: A (20°)</span>
+      <span style="background:#59d6a822; border:1px solid var(--accent3); color:#2fae7d; border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Gabarito: B (40°)</span>
+    </div>
+    <p style="color:var(--muted); font-style:italic; margin-bottom:16px;">"Um dos ângulos internos de um triângulo isósceles mede 100°. Qual é a medida do ângulo agudo formado pelas bissetrizes dos outros ângulos internos?"</p>
+    <div class="two-col">
+      <div class="canvas-wrap">
+        <canvas id="duvCanvas3" width="320" height="230"></canvas>
+        <div class="canvas-label">As bissetrizes se cruzam formando 140° (obtuso) e 40° (agudo)</div>
+      </div>
+      <div>
+        <ul class="steps">
+          <li>Soma dos ângulos = 180°. Se um mede 100°, sobram 80° para os outros dois. Como o triângulo é <b>isósceles</b>, eles são iguais: <b class="hl">40° cada</b>.</li>
+          <li>As bissetrizes cortam esses 40° ao meio → <b class="hl2">20° de cada lado</b>. Até aqui você foi perfeitamente! 👏</li>
+          <li>Mas a pergunta não é a metade do ângulo — é o ângulo <b>onde as duas bissetrizes se cruzam</b>. Feche o triângulo formado pela base e pelas duas bissetrizes: 180° − 20° − 20° = <b class="hl">140°</b>.</li>
+          <li>140° é obtuso. Quando duas retas se cruzam, formam dois pares de ângulos suplementares: 180° − 140° = <b class="hl3">40°</b> — esse é o agudo. Letra <b class="hl3">B</b> ✓</li>
+        </ul>
+      </div>
+    </div>
+    <div class="result-box" style="margin-top:16px;">💡 <b>Regra de bolso:</b> pediu ângulo <strong>entre</strong> duas cevianas? Feche um triângulo com elas e use a soma 180°. E lembre: retas que se cruzam formam um par agudo + um par obtuso (suplementares). Você parou um passo antes do fim — o raciocínio dos 20° estava certo!</div>
+  </div>
+
+  <!-- DÚVIDA 4: UFC baricentro -->
+  <div class="card reveal">
+    <h3>4️⃣ Os dois triângulos com o mesmo baricentro (UFC 2002)</h3>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+      <span style="background:var(--surface); border:1px solid var(--border); color:var(--muted); border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Vestibulares — Questão 10</span>
+      <span style="background:#ff5fa218; border:1px solid var(--accent2); color:var(--accent2); border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Você anotou: "não consegui resolver" 🥺</span>
+      <span style="background:#59d6a822; border:1px solid var(--accent3); color:#2fae7d; border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700;">Gabarito: B (10,5)</span>
+    </div>
+    <p style="color:var(--muted); font-style:italic; margin-bottom:16px;">"Dois triângulos equiláteros ABC e A'B'C' têm o mesmo baricentro, com lados paralelos (AB∥A'B', AC∥A'C', BC∥B'C'). O lado de ABC mede 3√3 e a distância entre os lados paralelos mede 2 cm. Qual é a altura de A'B'C'?"</p>
+    <div class="two-col">
+      <div class="canvas-wrap">
+        <canvas id="duvCanvas4" width="320" height="250"></canvas>
+        <div class="canvas-label">Segredo: trabalhar com a distância baricentro→lado (h/3)</div>
+      </div>
+      <div>
+        <ul class="steps">
+          <li>Altura do triângulo pequeno: h = l√3/2 = 3√3 × √3/2 = 9/2 = <b class="hl">4,5 cm</b>.</li>
+          <li>O <b>baricentro divide a altura em 2:1</b>: do vértice até ele são 2/3 da altura, e dele até o lado é 1/3. Logo, distância do baricentro ao lado do pequeno = 4,5/3 = <b class="hl">1,5 cm</b>.</li>
+          <li>Os lados são paralelos e distam 2 cm. Então a distância do (mesmo!) baricentro ao lado do triângulo grande = 1,5 + 2 = <b class="hl2">3,5 cm</b>.</li>
+          <li>Mas essa distância também vale <b>1/3 da altura do grande</b>: h'/3 = 3,5 → h' = <b class="hl3">10,5 cm</b>. Letra <b class="hl3">B</b> ✓</li>
+        </ul>
+      </div>
+    </div>
+    <div class="result-box" style="margin-top:16px;">💡 <b>Regra de bolso:</b> baricentro divide cada mediana na razão <strong>2:1</strong> — a distância dele até o <strong>lado</strong> é sempre <strong>h/3</strong>. No seu caderno você somou pedaços dos dois triângulos numa equação só (2x + x + 2); o pulo do gato era comparar as duas distâncias <em>baricentro→lado</em>: h/3 do pequeno + 2 = h'/3 do grande. Guarda esse truque que ele volta em prova! 💪</div>
   </div>
 </section>
 
@@ -2908,6 +3025,188 @@ function switchTab(group, id){
 // ════════════════════════════════════════
 // QUIZ
 // ════════════════════════════════════════
+// ════════════════════════════════════════
+// DÚVIDAS EXPLICADAS — ilustrações
+// ════════════════════════════════════════
+(function(){
+  // 1) Guaritas → mediatriz
+  (function(){
+    const c=$('duvCanvas1'); if(!c) return;
+    const ctx=c.getContext('2d');
+    const G1={x:80,y:70}, G2={x:240,y:150};
+    const M={x:(G1.x+G2.x)/2, y:(G1.y+G2.y)/2};
+    const dx=G2.x-G1.x, dy=G2.y-G1.y, len=Math.hypot(dx,dy);
+    const nx=-dy/len, ny=dx/len; // direção da mediatriz
+
+    // segmento entre guaritas (tracejado)
+    ctx.strokeStyle='#8892b0'; ctx.lineWidth=1.5; ctx.setLineDash([5,4]);
+    ctx.beginPath(); ctx.moveTo(G1.x,G1.y); ctx.lineTo(G2.x,G2.y); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // mediatriz (estrada)
+    ctx.strokeStyle='#ff5fa2'; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.moveTo(M.x-nx*95, M.y-ny*95); ctx.lineTo(M.x+nx*95, M.y+ny*95); ctx.stroke();
+
+    // ângulo reto no ponto médio
+    const s=9, ux=dx/len, uy=dy/len;
+    ctx.strokeStyle='#ffd4e6'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    ctx.moveTo(M.x+ux*s, M.y+uy*s);
+    ctx.lineTo(M.x+ux*s+nx*s, M.y+uy*s+ny*s);
+    ctx.lineTo(M.x+nx*s, M.y+ny*s);
+    ctx.stroke();
+
+    // ponto E na estrada com distâncias iguais
+    const E={x:M.x+nx*55, y:M.y+ny*55};
+    ctx.strokeStyle='#59d6a8'; ctx.lineWidth=1.5; ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(E.x,E.y); ctx.lineTo(G1.x,G1.y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(E.x,E.y); ctx.lineTo(G2.x,G2.y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#59d6a8'; ctx.font='bold 11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('d', (E.x+G1.x)/2-8, (E.y+G1.y)/2-4);
+    ctx.fillText('d', (E.x+G2.x)/2+10, (E.y+G2.y)/2-4);
+    ctx.beginPath(); ctx.arc(E.x,E.y,4,0,Math.PI*2); ctx.fill();
+
+    // guaritas
+    [[G1,'Guarita 1',-14],[G2,'Guarita 2',16]].forEach(([g,nome,off])=>{
+      ctx.beginPath(); ctx.arc(g.x,g.y,5,0,Math.PI*2); ctx.fillStyle='#ffb26b'; ctx.fill();
+      ctx.fillStyle='#ffd4e6'; ctx.font='bold 11px sans-serif';
+      ctx.fillText(nome, g.x, g.y+off);
+    });
+    ctx.fillStyle='#ff9ec9'; ctx.font='bold 11px sans-serif';
+    ctx.save(); ctx.translate(M.x+nx*80, M.y+ny*80); ctx.fillText('estrada', 16, -32); ctx.restore();
+  })();
+
+  // 2) Moeda → 3 pontos, mediatrizes das cordas
+  (function(){
+    const c=$('duvCanvas2'); if(!c) return;
+    const ctx=c.getContext('2d');
+    const O={x:160,y:115}, r=82;
+    const ang=[-1.05, 2.95, 1.05]; // 3 pontos
+    const P=ang.map(a=>({x:O.x+r*Math.cos(a), y:O.y+r*Math.sin(a)}));
+
+    // moeda
+    ctx.strokeStyle='#ffb26b'; ctx.lineWidth=2.5;
+    ctx.beginPath(); ctx.arc(O.x,O.y,r,0,Math.PI*2); ctx.stroke();
+
+    // cordas P0P1 e P1P2
+    ctx.strokeStyle='#c77dff'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(P[0].x,P[0].y); ctx.lineTo(P[1].x,P[1].y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(P[1].x,P[1].y); ctx.lineTo(P[2].x,P[2].y); ctx.stroke();
+
+    // mediatrizes das cordas (passam pelo centro)
+    [[P[0],P[1]],[P[1],P[2]]].forEach(([a,b])=>{
+      const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+      const vx=O.x-mx, vy=O.y-my, vl=Math.hypot(vx,vy)||1;
+      ctx.strokeStyle='#59d6a8'; ctx.lineWidth=1.5; ctx.setLineDash([5,4]);
+      ctx.beginPath();
+      ctx.moveTo(mx-vx/vl*35, my-vy/vl*35);
+      ctx.lineTo(O.x+vx/vl*55, O.y+vy/vl*55);
+      ctx.stroke(); ctx.setLineDash([]);
+    });
+
+    // centro
+    ctx.beginPath(); ctx.arc(O.x,O.y,5,0,Math.PI*2); ctx.fillStyle='#ff5fa2'; ctx.fill();
+    ctx.fillStyle='#ff9ec9'; ctx.font='bold 12px sans-serif'; ctx.textAlign='center';
+    ctx.fillText('centro!', O.x+2, O.y+22);
+
+    // pontos numerados
+    P.forEach((p,i)=>{
+      ctx.beginPath(); ctx.arc(p.x,p.y,5,0,Math.PI*2); ctx.fillStyle='#ffd4e6'; ctx.fill();
+      ctx.fillStyle='#ffd4e6'; ctx.font='bold 12px sans-serif';
+      const lx=p.x+(p.x-O.x)/r*16, ly=p.y+(p.y-O.y)/r*16;
+      ctx.fillText(String(i+1), lx, ly+4);
+    });
+  })();
+
+  // 3) UFES → bissetrizes do isósceles
+  (function(){
+    const c=$('duvCanvas3'); if(!c) return;
+    const ctx=c.getContext('2d');
+    const A={x:160,y:32}, B={x:42,y:200}, C={x:278,y:200};
+
+    // triângulo
+    ctx.strokeStyle='#ff5fa2'; ctx.lineWidth=2.5; ctx.fillStyle='#ff5fa218';
+    ctx.beginPath(); ctx.moveTo(A.x,A.y); ctx.lineTo(B.x,B.y); ctx.lineTo(C.x,C.y); ctx.closePath();
+    ctx.fill(); ctx.stroke();
+
+    // bissetrizes de B e C (20° acima da base), estendidas além do cruzamento
+    const t=Math.tan(20*Math.PI/180);
+    const I={x:160, y:200-118*t}; // cruzamento (~157)
+    [[B,1],[C,-1]].forEach(([V,s])=>{
+      ctx.strokeStyle='#59d6a8'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+      ctx.beginPath(); ctx.moveTo(V.x,V.y);
+      ctx.lineTo(V.x+s*205, V.y-205*t);
+      ctx.stroke(); ctx.setLineDash([]);
+    });
+
+    // rótulos dos ângulos
+    ctx.font='bold 11px sans-serif'; ctx.textAlign='center';
+    ctx.fillStyle='#ffb26b'; ctx.fillText('100°', A.x, A.y+30);
+    ctx.fillStyle='#ffd4e6';
+    ctx.fillText('20°', B.x+42, B.y-6);
+    ctx.fillText('20°', C.x-42, C.y-6);
+    ctx.fillText('20°', B.x+52, B.y-26);
+    ctx.fillText('20°', C.x-52, C.y-26);
+
+    // ângulos no cruzamento
+    ctx.beginPath(); ctx.arc(I.x,I.y,4,0,Math.PI*2); ctx.fillStyle='#ff5fa2'; ctx.fill();
+    ctx.fillStyle='#ff9ec9'; ctx.font='bold 13px sans-serif';
+    ctx.fillText('140°', I.x, I.y+24);
+    ctx.fillStyle='#59d6a8'; ctx.font='bold 14px sans-serif';
+    ctx.fillText('40° ✓', I.x, I.y-14);
+  })();
+
+  // 4) UFC → triângulos com mesmo baricentro
+  (function(){
+    const c=$('duvCanvas4'); if(!c) return;
+    const ctx=c.getContext('2d');
+    const esc=15; // 1 cm = 15 px
+    const G={x:160,y:112};
+    const r1=1.5*esc, r2=3.5*esc; // distância baricentro→lado
+
+    function triDown(rTop, color, fill){
+      const half=rTop*Math.sqrt(3);
+      const top=G.y-rTop, apex=G.y+2*rTop;
+      ctx.strokeStyle=color; ctx.lineWidth=2.5;
+      ctx.beginPath();
+      ctx.moveTo(G.x-half, top); ctx.lineTo(G.x+half, top);
+      ctx.lineTo(G.x, apex); ctx.closePath();
+      if(fill){ ctx.fillStyle=fill; ctx.fill(); }
+      ctx.stroke();
+    }
+    triDown(r2, '#c77dff', '#c77dff14');
+    triDown(r1, '#ff5fa2', '#ff5fa218');
+
+    // baricentro
+    ctx.beginPath(); ctx.arc(G.x,G.y,4.5,0,Math.PI*2); ctx.fillStyle='#ffb26b'; ctx.fill();
+    ctx.fillStyle='#ffb26b'; ctx.font='bold 11px sans-serif'; ctx.textAlign='left';
+    ctx.fillText('baricentro', G.x+10, G.y+4);
+
+    // linha vertical de medidas (à esquerda do baricentro)
+    const mx=G.x-58;
+    ctx.strokeStyle='#ffd4e6'; ctx.lineWidth=1.5;
+    function seta(y1,y2,label,cor){
+      ctx.strokeStyle=cor; ctx.beginPath(); ctx.moveTo(mx,y1); ctx.lineTo(mx,y2); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(mx-4,y1+5); ctx.lineTo(mx,y1); ctx.lineTo(mx+4,y1+5); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(mx-4,y2-5); ctx.lineTo(mx,y2); ctx.lineTo(mx+4,y2-5); ctx.stroke();
+      ctx.fillStyle=cor; ctx.font='bold 11px sans-serif'; ctx.textAlign='right';
+      ctx.fillText(label, mx-8, (y1+y2)/2+4);
+    }
+    seta(G.y-r1, G.y, '1,5', '#ff5fa2');
+    seta(G.y-r2, G.y-r1, '2', '#59d6a8');
+    // chave total à direita
+    const mx2=G.x+80;
+    ctx.strokeStyle='#c77dff'; ctx.beginPath(); ctx.moveTo(mx2,G.y-r2); ctx.lineTo(mx2,G.y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(mx2-4,G.y-r2+5); ctx.lineTo(mx2,G.y-r2); ctx.lineTo(mx2+4,G.y-r2+5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(mx2-4,G.y-5); ctx.lineTo(mx2,G.y); ctx.lineTo(mx2+4,G.y-5); ctx.stroke();
+    ctx.fillStyle='#c77dff'; ctx.textAlign='left'; ctx.font='bold 11px sans-serif';
+    ctx.fillText("3,5 = h'/3", mx2+8, G.y-r2/2+4);
+    ctx.fillStyle='#59d6a8'; ctx.font='bold 13px sans-serif'; ctx.textAlign='center';
+    ctx.fillText("h' = 3 × 3,5 = 10,5 cm ✓", G.x, G.y+2*r2+28);
+  })();
+})();
+
 // level: 1 = Fácil, 2 = Médio, 3 = Difícil
 const questions=[
   // ── NÍVEL FÁCIL ──
