@@ -541,10 +541,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    /* centralização fica por conta do margin:auto do .welcome-content —
+       assim, quando a tela é baixa, o topo não é cortado e dá pra rolar */
     text-align: center;
     padding: 24px;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     background:
       radial-gradient(ellipse at 50% 20%, #ffe0ef 0%, transparent 60%),
       radial-gradient(ellipse at 50% 100%, #ffd0e6 0%, transparent 60%),
@@ -554,7 +556,7 @@
 
   /* corações que sobem no fundo da splash */
   #welcome-hearts {
-    position: absolute; inset: 0;
+    position: fixed; inset: 0;
     width: 100%; height: 100%;
     pointer-events: none;
   }
@@ -566,6 +568,7 @@
     flex-direction: column;
     align-items: center;
     gap: 6px;
+    margin: auto 0; /* centraliza sem cortar o topo quando a tela é baixa */
     animation: floatIn 1.1s cubic-bezier(.16,.8,.3,1) both;
   }
 
@@ -718,6 +721,38 @@
     to { opacity: 0; }
   }
 
+  /* ── BALÃO DE FALA DO AVATAR ── */
+  .avatar-bubble {
+    position: relative;
+    max-width: 260px;
+    margin-bottom: 12px;
+    background: #fff;
+    color: #d13a76;
+    padding: 10px 18px;
+    border-radius: 18px;
+    font-weight: 600;
+    font-size: .92rem;
+    line-height: 1.35;
+    box-shadow: 0 8px 22px #ff5fa244;
+    opacity: 0;
+    transform: scale(.4);
+    transform-origin: 50% 100%;
+    animation: bubblePop .55s cubic-bezier(.34,1.56,.64,1) 1.2s forwards;
+  }
+  .avatar-bubble::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -9px;
+    transform: translateX(-50%);
+    border: 10px solid transparent;
+    border-top-color: #fff;
+    border-bottom: 0;
+  }
+  @keyframes bubblePop {
+    to { opacity: 1; transform: scale(1); }
+  }
+
   /* ── AVATAR ── */
   .avatar-wrap {
     width: 132px;
@@ -736,6 +771,7 @@
   @media (prefers-reduced-motion: reduce) {
     .heart-btn, .heart-btn .heart-glow, .heart-hint, .welcome-content,
     .avatar-wrap { animation: none !important; }
+    .avatar-bubble { animation: none !important; opacity: 1; transform: none; }
   }
 </style>
 </head>
@@ -747,6 +783,7 @@
 <div class="welcome" id="welcome">
   <canvas id="welcome-hearts"></canvas>
   <div class="welcome-content">
+    <div class="avatar-bubble">Oii! Temos conteúdo novo no Quiz, vai lá conferir! 💗</div>
     <div class="avatar-wrap" aria-hidden="true">
       <svg viewBox="0 0 156 156" xmlns="http://www.w3.org/2000/svg">
         <!-- cabelo (atrás) -->
@@ -878,6 +915,18 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="card reveal">
+    <h3>Ângulos que sempre caem na prova</h3>
+    <p style="color:var(--muted); margin-bottom:16px;">Quatro relações de ângulos que o ENEM cobra direto, muitas vezes escondidas dentro de uma figura maior:</p>
+    <ul class="steps">
+      <li><span><b class="hl">Opostos pelo vértice (OPV)</b> — quando duas retas se cruzam, os ângulos "de frente" um pro outro são <b>iguais</b>.</span></li>
+      <li><span><b class="hl2">Complementares</b> — dois ângulos que somam <b>90°</b>. Ex.: 35° e 55°.</span></li>
+      <li><span><b class="hl3">Suplementares</b> — dois ângulos que somam <b>180°</b>. Ex.: ângulos vizinhos em uma linha reta.</span></li>
+      <li><span><b class="hl">Volta completa</b> — todos os ângulos ao redor de um ponto somam <b>360°</b>.</span></li>
+    </ul>
+    <div class="result-box" style="margin-top:16px;">💡 Dica: quando o enunciado der um ângulo e pedir "o outro", quase sempre é OPV (igual), complementar (90° − x) ou suplementar (180° − x).</div>
   </div>
 </section>
 
@@ -1304,6 +1353,33 @@
     </div>
   </div>
 
+  <div class="card reveal">
+    <h3>Ângulo Central × Ângulo Inscrito</h3>
+    <div class="two-col">
+      <div>
+        <p style="color:var(--muted); margin-bottom:16px;">Quando dois ângulos "enxergam" o mesmo arco da circunferência, vale uma relação fixa:</p>
+        <div class="formula">Ângulo inscrito = Ângulo central / 2</div>
+        <ul class="steps" style="margin-top:12px;">
+          <li><span><b class="hl">Ângulo central</b> — tem o vértice no <b>centro</b> do círculo. Mede o mesmo que o arco.</span></li>
+          <li><span><b class="hl2">Ângulo inscrito</b> — tem o vértice <b>na circunferência</b>. Mede a <b>metade</b> do arco que enxerga.</span></li>
+          <li><span>Caso famoso: todo ângulo inscrito que enxerga o <b>diâmetro</b> mede <b>90°</b> — um triângulo com um lado no diâmetro é sempre retângulo!</span></li>
+        </ul>
+      </div>
+      <div>
+        <div class="enem-box" style="margin:0;">
+          <div class="enem-tag">Exemplo rápido</div>
+          <p>Um arco de circunferência mede <b>80°</b> (ângulo central). Quanto mede um ângulo inscrito que enxerga esse mesmo arco?</p>
+          <button class="btn" onclick="revealAnswer('inscritoAns')">Ver resposta</button>
+          <div class="answer-reveal" id="inscritoAns">
+            <ul class="steps">
+              <li>Ângulo inscrito = central / 2 = 80° / 2 = <b class="hl3">40°</b></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="enem-box reveal">
     <div class="enem-tag">Problema tipo ENEM</div>
     <p>Uma pizzaria corta suas pizzas redondas em 8 fatias iguais. O raio da pizza é <b>30 cm</b>. Qual é a área de cada fatia? (use π = 3)</p>
@@ -1426,8 +1502,8 @@
 
   <!-- PROBLEMA DO ENUNCIADO (terrenos) -->
   <div class="enem-box reveal">
-    <div class="enem-tag">Problema dos Terrenos — Como no enunciado</div>
-    <p>Um pai comprou dois terrenos de mesma área. O terreno do filho mais novo é retangular com <b>comprimento = largura + 7</b>. O terreno do filho mais velho tem formato irregular (Figura B) com os lados <b>15 m, 21 m e 15 m</b> com um recorte de <b>3 m</b> no canto.</p>
+    <div class="enem-tag">Problema dos Terrenos — Geometria + Álgebra</div>
+    <p>Um pai comprou dois terrenos de mesma área. O terreno do filho mais novo é retangular, com <b>comprimento = largura + 7</b>. O terreno do filho mais velho é um trapézio retângulo (Figura B) com lado esquerdo de <b>15 m</b>, base de <b>16 m</b>, lado direito de <b>3 m</b> e lado inclinado de <b>20 m</b>. Quais são as dimensões do terreno retangular?</p>
     <div style="display:flex; gap:16px; flex-wrap:wrap; margin:16px 0;">
       <div class="canvas-wrap" style="flex:1; min-width:220px;">
         <canvas id="terrenoACanvas" width="260" height="180"></canvas>
@@ -1441,18 +1517,16 @@
     <button class="btn" onclick="revealAnswer('terrenoAns')">Ver resolução completa</button>
     <div class="answer-reveal" id="terrenoAns">
       <b>Passo 1:</b> Calcular a área do terreno B (Figura B)<br>
-      O terreno B é um triângulo grande menos um triângulo pequeno no canto.<br>
-      — Triângulo grande: base=15 m, altura=15 m → A = (15×15)/2 = 112,5 m²<br>
-      — Triângulo pequeno (canto): catetos 3 m × ? m (pela figura, 3×3) → A = (3×3)/2 = 4,5 m²<br>
-      — Área B ≈ 112,5 − 4,5 = <b>108 m²</b><br><br>
+      O terreno B é um trapézio "deitado": as bases paralelas são os lados verticais de <b>15 m</b> e <b>3 m</b>, e a altura do trapézio é a distância entre eles, <b>16 m</b>.<br>
+      — Área B = (B + b) × h / 2 = (15 + 3) × 16 / 2 = 18 × 8 = <b>144 m²</b><br><br>
       <b>Passo 2:</b> Montar equação para o terreno A<br>
       Largura = x, Comprimento = x + 7<br>
-      Área A = x(x+7) = 108<br>
-      x² + 7x − 108 = 0<br><br>
+      Área A = x(x + 7) = 144<br>
+      x² + 7x − 144 = 0<br><br>
       <b>Passo 3:</b> Resolver a equação quadrática (Bhaskara)<br>
-      Δ = 49 + 432 = 481 → √481 ≈ 21,93... (ou usamos valores inteiros)<br>
-      Tentativa: x=9 → 9×16 = 144 ≠ 108 | x=8 → 8×15 = 120 ≠ 108 | x=9 → 81+63=144<br>
-      <div class="result-box" style="margin-top:8px;">Testando x = 9: 9 × 16 = 144 m² | x=8: 8×15=120 | x=7: 7×14=98 | → O problema indica área = 108, então checar os valores reais da figura B.</div>
+      Δ = 7² + 4 × 144 = 49 + 576 = 625 → √625 = 25<br>
+      x = (−7 + 25) / 2 = 18 / 2 = <b class="hl3">9</b> (a raiz negativa não serve para medida)<br>
+      <div class="result-box" style="margin-top:8px;">O terreno retangular mede <strong>9 m × 16 m</strong>. Conferindo: 9 × 16 = 144 m² = área do trapézio. ✓</div>
     </div>
   </div>
 
@@ -1530,7 +1604,7 @@
 <section id="quiz">
   <div class="section-label">Módulo 8</div>
   <h2>Quiz por Níveis</h2>
-  <p class="section-intro">24 questões no estilo ENEM em 3 níveis de dificuldade. Escolha o nível, clique em qualquer questão do menu e navegue livremente — refaça quantas vezes quiser.</p>
+  <p class="section-intro">36 questões no estilo ENEM em 3 níveis de dificuldade. Escolha o nível, clique em qualquer questão do menu e navegue livremente — refaça quantas vezes quiser.</p>
 
   <div class="card reveal" id="quizCard">
     <div class="tabs" id="quizLevels"></div>
@@ -1580,6 +1654,8 @@
       <div class="cheat-card"><h4>📏 Pitágoras</h4><div class="formula">a² + b² = c²</div><div class="formula">Ternas: 3-4-5 • 5-12-13 • 8-15-17</div></div>
       <div class="cheat-card"><h4>🔶 Polígono Regular</h4><div class="formula">Soma âng. = (n−2) × 180°</div><div class="formula">Diagonais = n(n−3) / 2</div></div>
       <div class="cheat-card"><h4>🪞 Semelhança e Escala</h4><div class="formula">Comprimentos: razão k</div><div class="formula">Áreas: razão k²</div></div>
+      <div class="cheat-card"><h4>📐 Ângulos</h4><div class="formula">OPV: iguais</div><div class="formula">Complementares: somam 90°</div><div class="formula">Suplementares: somam 180°</div></div>
+      <div class="cheat-card"><h4>🎯 Ângulo Inscrito</h4><div class="formula">Inscrito = Central / 2</div><div class="formula">Inscrito no diâmetro = 90°</div></div>
     </div>
   </div>
 
@@ -2704,37 +2780,27 @@ drawTriangle('triObtCanvas',  [[30,180],[260,180],[200,60]],  '#c084fc');
   ctxa.fillStyle='#a5b4fc'; ctxa.font='12px sans-serif';
   ctxa.fillText('Terreno A (retangular)', 130, 170);
 
-  // Figura B — irregular
+  // Figura B — trapézio retângulo: lado esquerdo 15 m, base 16 m, lado direito 3 m, inclinado 20 m
   const cb=$('terrenoBCanvas'), ctxb=cb.getContext('2d');
   ctxb.clearRect(0,0,260,180);
-  const sc=7;
-  // Draw figure B: trapezoid-like shape 15m x 15m base, hypotenuse 21m, notch 3m
-  const pts=[[40,20],[40,20+15*sc],[40+15*sc,20+15*sc],[40+15*sc,20+3*sc],[40+15*sc-3*sc,20+3*sc],[40+15*sc-3*sc,20]];
-  // simpler: right triangle big minus small corner
-  // Large right triangle: bottom-left origin, base=15, height=15
-  const ox2=30, oy2=160;
-  // big triangle vertices: (ox2,oy2), (ox2+15*sc,oy2), (ox2,oy2-15*sc)
-  // notch at (ox2+15*sc,oy2): 3m cut → (ox2+15*sc,oy2-3*sc)
-  const shp=[[ox2,oy2],[ox2+15*sc,oy2],[ox2+15*sc,oy2-3*sc],[ox2+(15-3)*sc,oy2-3*sc],[ox2,oy2-15*sc+3*sc]];
-  // simpler polygon for Figura B matching the image (trapezoid with vertical left, diagonal top-right)
+  const sc=7, ox2=50, oy2=155;
   const pts2=[
-    [ox2,oy2-15*sc],  // top-left
-    [ox2+15*sc,oy2],  // bottom-right (base corner)
-    [ox2+15*sc,oy2-3*sc], // notch bottom
-    [ox2+(15-3)*sc,oy2-3*sc], // notch inner
-    [ox2,oy2]  // bottom-left
+    [ox2, oy2-15*sc],       // topo do lado esquerdo
+    [ox2+16*sc, oy2-3*sc],  // topo do lado direito (lado inclinado liga esses dois)
+    [ox2+16*sc, oy2],       // base do lado direito
+    [ox2, oy2]              // base do lado esquerdo
   ];
   ctxb.fillStyle='#f7971e22'; ctxb.strokeStyle='#f7971e'; ctxb.lineWidth=2;
   ctxb.beginPath(); ctxb.moveTo(...pts2[0]); pts2.slice(1).forEach(p=>ctxb.lineTo(...p)); ctxb.closePath();
   ctxb.fill(); ctxb.stroke();
   // Labels
   ctxb.fillStyle='#f7971e'; ctxb.font='bold 11px sans-serif'; ctxb.textAlign='center';
-  ctxb.fillText('21 m', ox2+15*sc/2+20, oy2-15*sc/2);
-  ctxb.fillText('15 m', ox2-18, oy2-7*sc);
-  ctxb.fillText('15 m', ox2+7*sc, oy2+14);
-  ctxb.fillText('3 m', ox2+15*sc+18, oy2-1.5*sc);
+  ctxb.fillText('20 m', ox2+8*sc, oy2-10*sc);
+  ctxb.fillText('15 m', ox2-20, oy2-7*sc);
+  ctxb.fillText('16 m', ox2+8*sc, oy2+14);
+  ctxb.fillText('3 m', ox2+16*sc+18, oy2-1.5*sc);
   ctxb.fillStyle='#a5b4fc'; ctxb.font='12px sans-serif';
-  ctxb.fillText('Terreno B (irregular)', 130, 178);
+  ctxb.fillText('Terreno B (trapézio)', 130, 176);
 })();
 
 // ════════════════════════════════════════
@@ -2870,6 +2936,34 @@ const questions=[
     answer:3,
     explain:'O diâmetro é o dobro do raio: d = 2r = 2 × 7 = 14 cm.'
   },
+  {
+    level:1,
+    q:'Um paralelogramo tem base 9 m e altura 4 m. Qual é sua área?',
+    opts:['36 m²','13 m²','26 m²','18 m²'],
+    answer:0,
+    explain:'A = b × h = 9 × 4 = 36 m² (mesma fórmula do retângulo).'
+  },
+  {
+    level:1,
+    q:'Qual é o comprimento (circunferência) de um círculo de raio 4 m? (use π = 3)',
+    opts:['12 m','24 m','48 m','8 m'],
+    answer:1,
+    explain:'C = 2 × π × r = 2 × 3 × 4 = 24 m.'
+  },
+  {
+    level:1,
+    q:'Um retângulo tem base 8 m e altura 3 m. Qual é seu perímetro?',
+    opts:['24 m','11 m','22 m','32 m'],
+    answer:2,
+    explain:'P = 2 × (b + h) = 2 × (8 + 3) = 2 × 11 = 22 m.'
+  },
+  {
+    level:1,
+    q:'Dois ângulos são complementares (somam 90°). Se um deles mede 35°, quanto mede o outro?',
+    opts:['145°','65°','45°','55°'],
+    answer:3,
+    explain:'Complementares somam 90°: 90° − 35° = 55°.'
+  },
 
   // ── NÍVEL MÉDIO ──
   {
@@ -2928,6 +3022,34 @@ const questions=[
     answer:1,
     explain:'A = (90/360) × π × r² = (1/4) × 3 × 64 = 48 m².'
   },
+  {
+    level:2,
+    q:'Um terreno quadrado tem área de 144 m². Quantos metros de cerca são necessários para cercá-lo por completo?',
+    opts:['12 m','48 m','36 m','24 m'],
+    answer:1,
+    explain:'Lado = √144 = 12 m. Perímetro = 4 × 12 = 48 m.'
+  },
+  {
+    level:2,
+    q:'Qual é a diagonal de um quadrado de lado 5 m? (use √2 = 1,4)',
+    opts:['7 m','10 m','5 m','8 m'],
+    answer:0,
+    explain:'d = l√2 = 5 × 1,4 = 7 m.'
+  },
+  {
+    level:2,
+    q:'A roda de uma bicicleta tem raio de 0,5 m. Quantos metros ela percorre ao dar 100 voltas completas? (use π = 3)',
+    opts:['150 m','300 m','600 m','100 m'],
+    answer:1,
+    explain:'Cada volta percorre C = 2πr = 2 × 3 × 0,5 = 3 m. Em 100 voltas: 100 × 3 = 300 m.'
+  },
+  {
+    level:2,
+    q:'Qual é o ângulo externo de um polígono regular de 12 lados?',
+    opts:['30°','36°','24°','15°'],
+    answer:0,
+    explain:'Ângulo externo = 360°/n = 360°/12 = 30°.'
+  },
 
   // ── NÍVEL DIFÍCIL ──
   {
@@ -2985,6 +3107,34 @@ const questions=[
     opts:['27 m²','75 m²','6 m²','48 m²'],
     answer:3,
     explain:'A = π(R² − r²) = 3 × (25 − 9) = 3 × 16 = 48 m².'
+  },
+  {
+    level:3,
+    q:'Um quadrado está inscrito em um círculo de raio 4 m. Qual é a área do quadrado?',
+    opts:['16 m²','64 m²','32 m²','24 m²'],
+    answer:2,
+    explain:'A diagonal do quadrado é o diâmetro do círculo: d = 8 m. Área = d²/2 = 64/2 = 32 m².'
+  },
+  {
+    level:3,
+    q:'Em um mapa na escala 1:500, um terreno retangular mede 4 cm por 6 cm. Qual é a área real do terreno?',
+    opts:['24 m²','600 m²','1200 m²','300 m²'],
+    answer:1,
+    explain:'4 cm × 500 = 2000 cm = 20 m; 6 cm × 500 = 30 m. Área = 20 × 30 = 600 m².'
+  },
+  {
+    level:3,
+    q:'Um triângulo equilátero tem perímetro de 18 m. Qual é sua área? (use √3 = 1,7)',
+    opts:['15,3 m²','30,6 m²','9 m²','18 m²'],
+    answer:0,
+    explain:'Lado = 18/3 = 6 m. A = l²√3/4 = 36 × 1,7 / 4 = 61,2/4 = 15,3 m².'
+  },
+  {
+    level:3,
+    q:'Uma pizza circular de raio 20 cm é dividida em 8 fatias iguais. Qual é a área de cada fatia? (use π = 3)',
+    opts:['150 cm²','300 cm²','200 cm²','100 cm²'],
+    answer:0,
+    explain:'Área total = π × r² = 3 × 400 = 1200 cm². Cada fatia = 1200/8 = 150 cm².'
   }
 ];
 
