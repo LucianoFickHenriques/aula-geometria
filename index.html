@@ -535,6 +535,34 @@
   /* ── DÚVIDAS: desenho centralizado em cima, passos em largura total ── */
   .duv-flow .canvas-wrap { max-width: 380px; margin: 0 auto 20px; }
 
+  /* controles da construção animada */
+  .duv-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px 14px;
+  }
+  .duv-controls .btn {
+    margin-top: 0;
+    padding: 8px 14px;
+    font-size: .85rem;
+    flex-shrink: 0;
+  }
+  .duv-caption {
+    flex: 1;
+    text-align: center;
+    font-size: .82rem;
+    color: #ffd4e6;
+    line-height: 1.45;
+  }
+  .duv-caption b { color: #ff9ec9; }
+  .steps li { transition: background .3s, box-shadow .3s; border-radius: 8px; }
+  .steps li.step-active {
+    background: #ff5fa212;
+    box-shadow: 0 0 0 6px #ff5fa212;
+  }
+
   /* ══════════════════════════════════════
      TELA DE BOAS-VINDAS (SPLASH)
   ══════════════════════════════════════ */
